@@ -1,0 +1,9 @@
+# Composer files
+composer.phar
+composer.lock
+composer-test.lock
+vendor/
+
+# IDE files
+.idea
+*.iml

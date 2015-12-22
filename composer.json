@@ -1,0 +1,27 @@
+{
+  "name": "johnatannvmd/codeception-mailchecker-module",
+  "description": "Test emails in your Codeception acceptance tests",
+  "type": "library",
+  "keywords": ["codeception", "mail", "acceptance", "test"],
+  "license": "MIT",
+  "version": "1.0",
+  "authors": [
+    {
+      "name": "Evgeniy Tetenchuk",
+      "email": "webmaster@johnatan.ru"
+    }
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "suggest": {
+    "guzzlehttp/guzzle": "Allow you to use MailCatcher and MailDump providers",
+    "zendframework/zend-mail": "Allow you to use ZendMail provider"
+  },
+  "autoload": {
+    "psr-4": {
+      "Codeception\\Module\\": "src/Codeception/Module",
+      "MailChecker\\": "src/MailChecker"
+    }
+  }
+}

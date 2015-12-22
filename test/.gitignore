@@ -1,0 +1,11 @@
+# Composer files
+composer.phar
+composer.lock
+composer-test.lock
+vendor/
+
+# Test generated files
+tests/_output/*.eml
+tests/_helpers/_generated/AcceptanceTesterActions.php
+
+tests/_output/*

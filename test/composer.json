@@ -1,0 +1,23 @@
+{
+  "name": "johnatannvmd/codeception-mailchecker-module-test",
+  "description": "Test suite for the codeception-mailchecker-module",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Evgeniy Tetenchuk",
+      "email": "webmaster@johnatan.ru"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../"
+    }
+  ],
+  "require": {
+    "codeception/codeception": "^2.0",
+    "johnatannvmd/codeception-mailchecker-module": "^1",
+    "swiftmailer/swiftmailer": "^5.0",
+    "zendframework/zend-mail": "^2.3"
+  }
+}
