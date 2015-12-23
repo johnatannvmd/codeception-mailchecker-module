@@ -1,5 +1,7 @@
 <?php
-namespace MailChecker\Provider;
+namespace MailChecker\Providers;
+
+use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 
 class MailCatcher implements IProvider
 {

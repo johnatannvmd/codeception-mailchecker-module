@@ -1,5 +1,5 @@
 <?php
-namespace MailChecker\Provider;
+namespace MailChecker\Providers;
 
 use Zend\Mail\Message;
 
