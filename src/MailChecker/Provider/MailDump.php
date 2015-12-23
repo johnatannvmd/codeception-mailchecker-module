@@ -14,21 +14,21 @@ class MailDump implements IProvider
     {
         $ids = [];
         $messages = $this->messages();
-        if(empty($messages)) {
+        if (empty($messages)) {
             return [];
         }
 
-        foreach($messages as $message) {
-            foreach($message['recipients'] as $recipients) {
-                foreach($recipients as $recipient) {
-                    if(strpos($recipient, $address) !== false) {
+        foreach ($messages as $message) {
+            foreach ($message['recipients'] as $recipients) {
+                foreach ($recipients as $recipient) {
+                    if (strpos($recipient, $address) !== false) {
                         $ids[] = $message['id'];
                     }
                 }
             }
         }
 
-        if(count($ids) > 0) {
+        if (count($ids) > 0) {
             return $this->emailFromId(max($ids));
         }
 
@@ -38,7 +38,7 @@ class MailDump implements IProvider
     public function lastMessage()
     {
         $messages = $this->messages();
-        if(empty($messages)) {
+        if (empty($messages)) {
             return [];
         }
 
@@ -51,7 +51,7 @@ class MailDump implements IProvider
     {
         $response = json_decode($this->transport->get('/messages')->getBody()->getContents(), true);
 
-        if(isset($response['messages'])) {
+        if (isset($response['messages'])) {
             $messages = $response['messages'];
         } else {
             return [];

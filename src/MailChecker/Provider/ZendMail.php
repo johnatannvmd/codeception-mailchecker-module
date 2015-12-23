@@ -24,7 +24,7 @@ class ZendMail implements IProvider
      */
     public function __construct($config)
     {
-        if(!isset($config['options']['path'], $config['options']['extension'])) {
+        if (!isset($config['options']['path'], $config['options']['extension'])) {
             throw new \Exception('ZendMail provider can not find path or extension options in config.');
         }
 
@@ -38,8 +38,8 @@ class ZendMail implements IProvider
     public function clear()
     {
         $emails = glob($this->path . '/*.' . $this->extension);
-        foreach($emails as $email) {
-            if(is_file($email)) {
+        foreach ($emails as $email) {
+            if (is_file($email)) {
                 unlink($email);
             }
         }
@@ -53,17 +53,17 @@ class ZendMail implements IProvider
         $messagesFrom = [];
         $messages = $this->messages();
 
-        if(empty($messages)) {
+        if (empty($messages)) {
             return [];
         }
 
-        foreach($messages as $message) {
-            if($message->getTo()->has($address)) {
+        foreach ($messages as $message) {
+            if ($message->getTo()->has($address)) {
                 $messagesFrom[] = $message;
             }
         }
 
-        if(!empty($messagesFrom)) {
+        if (!empty($messagesFrom)) {
             /** @var \Zend\Mail\Message $lastMessage */
             $lastMessage = max($messagesFrom);
 
@@ -83,7 +83,7 @@ class ZendMail implements IProvider
     {
         $messages = $this->messages();
 
-        if(empty($messages)) {
+        if (empty($messages)) {
             return [];
         }
 

@@ -1,6 +1,7 @@
 <?php
 namespace MailChecker;
 
+use MailChecker\Exceptions\MailProviderNotFoundException;
 use MailChecker\Provider\IProvider;
 
 class MailProviderFactory
@@ -12,26 +13,29 @@ class MailProviderFactory
     ];
 
     /**
-     * @param $providerName string one of the self::$providers or FDQN to class which extends MailChecker\Provider\IProvider
+     * @param $providerName string one of the self::$providers or FDQN to class which
+     *                                 extends \MailChecker\Provider\IProvider
      * @param $config array Module configuration
      *
-     * @throws \Exception
+     * @throws \MailChecker\Exceptions\MailProviderNotFoundException
      *
      * @return \MailChecker\Provider\IProvider
      */
     public static function getProvider($providerName, $config)
     {
-        if(isset(self::$providers[$providerName])) {
+        if (isset(self::$providers[$providerName])) {
             return new self::$providers[$providerName]($config);
         }
 
-        if(!class_exists($providerName)) {
-            throw new \Exception("Provider '{$providerName}' not found.");
+        if (!class_exists($providerName)) {
+            throw new MailProviderNotFoundException("Provider '{$providerName}' not found.");
         }
 
         $providerClass = new $providerName($config);
-        if(!($providerClass instanceof IProvider)) {
-            throw new \Exception("Provider '{$providerName}' is not instance of MailChecker\\Provider\\IProvider.");
+        if (!($providerClass instanceof IProvider)) {
+            throw new MailProviderNotFoundException(
+                "Provider '{$providerName}' is not instance of MailChecker\\Provider\\IProvider."
+            );
         }
 
         return $providerClass;

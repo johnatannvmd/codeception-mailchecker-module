@@ -9,7 +9,7 @@ class Util
      *
      * @return int
      */
-    static function messageSortByCreatedAt($messageA, $messageB)
+    public static function messageSortByCreatedAt($messageA, $messageB)
     {
         $sortKeyA = $messageA['created_at'] . $messageA['id'];
         $sortKeyB = $messageB['created_at'] . $messageB['id'];

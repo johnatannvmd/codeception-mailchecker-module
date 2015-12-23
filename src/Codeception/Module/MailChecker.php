@@ -22,19 +22,25 @@ class MailChecker extends Module
      */
     protected $requiredFields = ['provider'];
 
+    /**
+     * Codeception hook used after configuration is loaded
+     *
+     * @throws \MailChecker\Exceptions\MailProviderNotFoundException
+     */
     public function _initialize()
     {
         $this->provider = MailProviderFactory::getProvider($this->config['provider'], $this->config);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function onReconfigure()
     {
         $this->_initialize();
     }
 
     /**
-     * Clear provider mail box emails
-     *
      * Clear all emails from provider. You probably want to do this before
      * you do the thing that will send emails
      **/
@@ -44,8 +50,6 @@ class MailChecker extends Module
     }
 
     /**
-     * See In Last Email
-     *
      * Look for a string in the most recent email
      *
      * @param $expected
@@ -57,8 +61,6 @@ class MailChecker extends Module
     }
 
     /**
-     * See In Last Email subject
-     *
      * Look for a string in the most recent email subject
      *
      * @param $expected
@@ -70,8 +72,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Don't See In Last Email subject
-     *
      * Look for the absence of a string in the most recent email subject
      *
      * @param $expected
@@ -83,8 +83,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Don't See In Last Email
-     *
      * Look for the absence of a string in the most recent email
      *
      * @param $unexpected
@@ -96,8 +94,6 @@ class MailChecker extends Module
     }
 
     /**
-     * See In Last Email To
-     *
      * Look for a string in the most recent email sent to $address
      *
      * @param $address
@@ -110,8 +106,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Don't See In Last Email To
-     *
      * Look for the absence of a string in the most recent email sent to $address
      *
      * @param $address
@@ -124,8 +118,6 @@ class MailChecker extends Module
     }
 
     /**
-     * See In Last Email Subject To
-     *
      * Look for a string in the most recent email subject sent to $address
      *
      * @param $address
@@ -138,8 +130,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Don't See In Last Email Subject To
-     *
      * Look for the absence of a string in the most recent email subject sent to $address
      *
      * @param $address
@@ -152,8 +142,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Grab Matches From Last Email
-     *
      * Look for a regex in the email source and return it's matches
      *
      * @param $regex
@@ -169,8 +157,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Grab From Last Email
-     *
      * Look for a regex in the email source and return it
      *
      * @param $regex
@@ -185,8 +171,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Grab Matches From Last Email To
-     *
      * Look for a regex in most recent email sent to $address email source and
      * return it's matches
      *
@@ -204,8 +188,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Grab From Last Email To
-     *
      * Look for a regex in most recent email sent to $address email source and
      * return it
      *
@@ -234,8 +216,6 @@ class MailChecker extends Module
     }
 
     /**
-     * See In Subject
-     *
      * Look for a string in an email subject
      *
      * @param $email
@@ -247,8 +227,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Don't See In Subject
-     *
      * Look for the absence of a string in an email subject
      *
      * @param $email
@@ -260,8 +238,6 @@ class MailChecker extends Module
     }
 
     /**
-     * See In Email
-     *
      * Look for a string in an email
      *
      * @param $email
@@ -273,8 +249,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Don't See In Email
-     *
      * Look for the absence of a string in an email
      *
      * @param $email
@@ -286,8 +260,6 @@ class MailChecker extends Module
     }
 
     /**
-     * Grab From Email
-     *
      * Return the matches of a regex against the raw email
      *
      * @param $email

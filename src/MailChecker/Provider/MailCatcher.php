@@ -20,19 +20,19 @@ class MailCatcher implements IProvider
     {
         $ids = [];
         $messages = $this->messages();
-        if(empty($messages)) {
+        if (empty($messages)) {
             return [];
         }
 
-        foreach($messages as $message) {
-            foreach($message['recipients'] as $recipient) {
-                if(strpos($recipient, $address) !== false) {
+        foreach ($messages as $message) {
+            foreach ($message['recipients'] as $recipient) {
+                if (strpos($recipient, $address) !== false) {
                     $ids[] = $message['id'];
                 }
             }
         }
 
-        if(count($ids) > 0) {
+        if (count($ids) > 0) {
             return $this->emailFromId(max($ids));
         }
 
@@ -45,7 +45,7 @@ class MailCatcher implements IProvider
     public function lastMessage()
     {
         $messages = $this->messages();
-        if(empty($messages)) {
+        if (empty($messages)) {
             return [];
         }
 

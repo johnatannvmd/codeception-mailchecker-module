@@ -23,7 +23,7 @@ trait GuzzleBasedProvider
             'base_uri' => $config['options']['url'] . ':' . $config['options']['port']
         ];
 
-        if(isset($config['options'], $config['options']['guzzleOptions'])) {
+        if (isset($config['options'], $config['options']['guzzleOptions'])) {
             $clientConfig = array_merge($clientConfig, $config['options']['guzzleOptions']);
         }
 

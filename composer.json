@@ -14,6 +14,9 @@
   "require": {
     "php": ">=5.4"
   },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "2.*"
+  },
   "suggest": {
     "guzzlehttp/guzzle": "Allow you to use MailCatcher and MailDump providers",
     "zendframework/zend-mail": "Allow you to use ZendMail provider"
@@ -23,5 +26,9 @@
       "Codeception\\Module\\": "src/Codeception/Module",
       "MailChecker\\": "src/MailChecker"
     }
+  },
+  "scripts": {
+    "phpcs": "php vendor/bin/phpcs --severity=6 --standard=test/ruleset.xml src/",
+    "test": "cd test && php vendor/bin/codecept run"
   }
 }

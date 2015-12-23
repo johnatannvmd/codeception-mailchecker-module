@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset name="Custom code standards">
+ <description>Code standard</description>
+ <arg name="encoding" value="utf-8"/>
+ <rule ref="PSR1"/>
+ <rule ref="PSR2"/>
+ <rule ref="Generic.Files.LineEndings">
+  <properties>
+   <property name="eolChar" value="\n"/>
+  </properties>
+ </rule>
+ <rule ref="PSR2.Methods.MethodDeclaration">
+  <severity>1</severity>
+ </rule>
+</ruleset>
