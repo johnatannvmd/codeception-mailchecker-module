@@ -5,10 +5,24 @@ php:
 before_install:
   - gem install mailcatcher
   - mailcatcher --http-ip 127.0.0.1 --http-port 1081 --smtp-ip 127.0.0.1 --smtp-port 1026
-  - pip install maildump
-  - maildump --http-ip 127.0.0.1 --http-port 1080 --smtp-ip 127.0.0.1 --smtp-port 1025
+  - pip install --user maildump
+  - maildump --http-ip 127.0.0.1 --http-port 1080 --smtp-ip 127.0.0.1 --smtp-port 1025 --pidfile ~/maildump.pid
   - cd test
-  - composer update
+  - composer self-update
+  - composer install --prefer-source
   - php vendor/bin/codecept build
 
-script: php vendor/bin/codecept run -d
+script:
+  - php vendor/bin/codecept run -d acceptance ZendMailCest
+  - php vendor/bin/codecept run -d acceptance MailCatcherCest
+  - php vendor/bin/codecept run -d acceptance MailDumpCest
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.cache/pip
+    - $HOME/.local/lib
+    - $HOME/.local/include
+    - $HOME/.local/bin

@@ -1,6 +1,10 @@
 <?php
-class ZendMailCest extends BaseMailChecker
+class ZendMailCest
 {
+    use BaseMailChecker {
+        _before as _baseBefore;
+    }
+
     protected function getProvider()
     {
         return 'ZendMail';
@@ -8,11 +12,6 @@ class ZendMailCest extends BaseMailChecker
 
     public function _before(\Codeception\Module\ZendMailerHelper $mailer)
     {
-        parent::_before($mailer);
-    }
-
-    protected function sendEmails(AcceptanceTester $I, \Codeception\Module\ZendMailerHelper $mailer)
-    {
-        parent::sendEmails($I, $mailer);
+        $this->_baseBefore($mailer);
     }
 }

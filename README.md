@@ -63,9 +63,7 @@ headers), you can set all of the allowed [Guzzle request options](http://docs.gu
                     url: 'http://project.dev'
                     port: '1080'
                     guzzleOptions:
-                        verify: false
-                        debug: true
-                        version: 1.0
+                        auth: ['yo', 'yo']
 
 You will then need to rebuild your actor class:
 

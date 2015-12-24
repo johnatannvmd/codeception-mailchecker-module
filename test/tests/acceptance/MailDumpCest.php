@@ -1,6 +1,10 @@
 <?php
-class MailDumpCest extends BaseMailChecker
+class MailDumpCest
 {
+    use BaseMailChecker {
+        _before as _baseBefore;
+    }
+
     protected function getProvider()
     {
         return 'MailDump';
@@ -8,11 +12,6 @@ class MailDumpCest extends BaseMailChecker
 
     public function _before(\Codeception\Module\SmtpMailerHelper $mailer)
     {
-        parent::_before($mailer);
-    }
-
-    protected function sendEmails(AcceptanceTester $I, \Codeception\Module\SmtpMailerHelper $mailer)
-    {
-        parent::sendEmails($I, $mailer);
+        $this->_baseBefore($mailer);
     }
 }

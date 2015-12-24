@@ -1,25 +1,32 @@
 <?php
-abstract class BaseMailChecker
+trait BaseMailChecker
 {
+    /**
+     * @var \Codeception\Module\BaseMailerHelper
+     */
+    protected $mailer;
+
     abstract protected function getProvider();
 
     public function _before(\Codeception\Module\BaseMailerHelper $mailer)
     {
-        $mailer->haveMailProvider($this->getProvider());
+        $this->mailer = $mailer;
+
+        $this->mailer->haveMailProvider($this->getProvider());
     }
 
-    protected function sendEmails(AcceptanceTester $I, \Codeception\Module\BaseMailerHelper $mailer)
+    protected function sendEmails(AcceptanceTester $I)
     {
         $I->clearMailbox();
 
-        $mailer->sendEmail(
+        $this->mailer->sendEmail(
             'from_' . sq(1) . '@somemailbox.com',
             'to' . sq(1) . '@othermailbox.com',
             'Subject ' . sq(1),
             'Body ' . sq(1)
         );
 
-        $mailer->sendEmail(
+        $this->mailer->sendEmail(
             'from_' . sq(2) . '@somemailbox.com',
             'to' . sq(2) . '@othermailbox.com',
             'Subject ' . sq(2),
