@@ -3,6 +3,19 @@ namespace MailChecker\Providers;
 
 use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 
+/**
+ * Class MailDump
+ *
+ * Config example:
+ * ```
+ * MailDump:
+ *   options:
+ *     url: 'http://127.0.0.1'
+ *     port: '1080'
+ * ```
+ *
+ * @package MailChecker\Providers
+ */
 class MailDump implements IProvider
 {
     use GuzzleBasedProvider;

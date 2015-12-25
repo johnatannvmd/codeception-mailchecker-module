@@ -7,6 +7,8 @@ before_install:
   - mailcatcher --http-ip 127.0.0.1 --http-port 1081 --smtp-ip 127.0.0.1 --smtp-port 1026
   - pip install --user maildump
   - maildump --http-ip 127.0.0.1 --http-port 1080 --smtp-ip 127.0.0.1 --smtp-port 1025 --pidfile ~/maildump.pid
+  - pip install --user lathermail
+  - lathermail --api-host 192.168.1.34 --api-port 1082 --smtp-host 127.0.0.1 --smtp-port 1027 </dev/null &>/dev/null &
   - cd test
   - composer self-update
   - composer install --prefer-source
@@ -16,6 +18,7 @@ script:
   - php vendor/bin/codecept run -d acceptance ZendMailCest
   - php vendor/bin/codecept run -d acceptance MailCatcherCest
   - php vendor/bin/codecept run -d acceptance MailDumpCest
+  - php vendor/bin/codecept run -d acceptance LatherMailCest
 
 sudo: false
 

@@ -4,33 +4,30 @@ namespace MailChecker\Providers;
 use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 
 /**
- * Class MailCatcher
+ * X-Mail-Password - same as SMTP password
+ * X-Mail-Inbox - same as SMTP user. Optional, work with all inboxes if not specified
  *
  * Config example:
  * ```
- * MailCatcher:
+ * LatherMail:
  *   options:
  *     url: 'http://127.0.0.1'
  *     port: '1080'
+ *     user: 'smtp-inbox'
+ *     password: 'smtp-password'
  * ```
  *
  * @package MailChecker\Providers
  */
-class MailCatcher implements IProvider
+class LatherMail implements IProvider
 {
     use GuzzleBasedProvider;
 
-    /**
-     * @inheritdoc
-     */
     public function clear()
     {
-        $this->transport->delete('/messages');
+        $this->transport->delete('/api/0/messages/');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function lastMessageFrom($address)
     {
         $ids = [];
@@ -41,8 +38,8 @@ class MailCatcher implements IProvider
 
         foreach ($messages as $message) {
             foreach ($message['recipients'] as $recipient) {
-                if (strpos($recipient, $address) !== false) {
-                    $ids[] = $message['id'];
+                if (strpos($recipient['address'], $address) !== false) {
+                    $ids[] = $message['_id'];
                 }
             }
         }
@@ -54,9 +51,6 @@ class MailCatcher implements IProvider
         return [];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function lastMessage()
     {
         $messages = $this->messages();
@@ -66,32 +60,28 @@ class MailCatcher implements IProvider
 
         $last = array_shift($messages);
 
-        return $this->emailFromId($last['id']);
+        return $this->emailFromId($last['_id']);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function messages()
     {
-        $response = $this->transport->get('/messages');
-        $messages = json_decode($response->getBody()->getContents(), true);
+        $response = json_decode($this->transport->get('/api/0/messages/')->getBody()->getContents(), true);
 
-        usort($messages, ['\\MailChecker\\Util', 'messageSortByCreatedAt']);
+        if (isset($response['message_list'])) {
+            $messages = $response['message_list'];
+        } else {
+            return [];
+        }
 
         return $messages;
     }
 
-    /**
-     * @param string $id
-     *
-     * @return array
-     */
     private function emailFromId($id)
     {
-        $response = $this->transport->get("/messages/{$id}.json");
-        $message = json_decode($response->getBody()->getContents(), true);
-        $message['source'] = quoted_printable_decode($message['source']);
+        $response = json_decode($this->transport->get("/api/0/messages/{$id}")->getBody()->getContents(), true);
+
+        $message = $response['message_info'];
+        $message['source'] = $message['message_raw'];
 
         return $message;
     }

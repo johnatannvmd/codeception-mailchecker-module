@@ -3,6 +3,19 @@ namespace MailChecker\Providers;
 
 use Zend\Mail\Message;
 
+/**
+ * Class ZendMail
+ *
+ * Config example:
+ * ```
+ * ZendMail:
+ *   options:
+ *     path: 'path/to/the/mail'
+ *     extension: 'mail_ext'
+ * ```
+ *
+ * @package MailChecker\Providers
+ */
 class ZendMail implements IProvider
 {
     /**

@@ -9,7 +9,8 @@ class MailProviderFactory
     private static $providers = [
         'MailCatcher' => '\\MailChecker\\Providers\\MailCatcher',
         'MailDump' => '\\MailChecker\\Providers\\MailDump',
-        'ZendMail' => '\\MailChecker\\Providers\\ZendMail'
+        'ZendMail' => '\\MailChecker\\Providers\\ZendMail',
+        'LatherMail' => '\\MailChecker\\Providers\\LatherMail'
     ];
 
     /**

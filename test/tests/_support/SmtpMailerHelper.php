@@ -28,4 +28,12 @@ class SmtpMailerHelper extends BaseMailerHelper
 
         $this->mailer->send($message);
     }
+
+    /**
+     * @return \Swift_Mailer
+     */
+    public function getMailer()
+    {
+        return $this->mailer;
+    }
 }
