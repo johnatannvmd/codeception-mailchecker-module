@@ -14,6 +14,7 @@ It supports several mail providers:
 * [MailDump](https://github.com/ThiefMaster/maildump)
 * [ZenMail](https://github.com/zendframework/zend-mail)
 * [LatherMail](https://github.com/reclosedev/lathermail)
+* [Mailtrap](https://mailtrap.io)
 
 ## Installation
 
@@ -46,10 +47,6 @@ port of your site's MailCatcher installation:
                     url: 'http://project.dev'
                     port: '1080'
 
-You will then need to rebuild your actor class:
-
-    php codecept.phar build
-
 ## Optional Configuration
 
 If you need to specify some special options (e.g. SSL verification or authentication
@@ -61,16 +58,12 @@ headers), you can set all of the allowed [Guzzle request options](http://docs.gu
             - MailChecker
         config:
             MailChecker:
-                provider: MailCatcher
+                provider: MailDump
                 options:
                     url: 'http://project.dev'
                     port: '1080'
                     guzzleOptions:
                         auth: ['yo', 'yo']
-
-You will then need to rebuild your actor class:
-
-    vendor/bin/codecept build
 
 ## Example Usage
 
