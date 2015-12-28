@@ -10,7 +10,8 @@ class MailProviderFactory
         'MailCatcher' => '\\MailChecker\\Providers\\MailCatcher',
         'MailDump' => '\\MailChecker\\Providers\\MailDump',
         'ZendMail' => '\\MailChecker\\Providers\\ZendMail',
-        'LatherMail' => '\\MailChecker\\Providers\\LatherMail'
+        'LatherMail' => '\\MailChecker\\Providers\\LatherMail',
+        'MailTrap' => '\\MailChecker\\Providers\\MailTrap'
     ];
 
     /**

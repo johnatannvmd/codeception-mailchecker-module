@@ -11,6 +11,11 @@ trait GuzzleBasedProvider
     protected $transport;
 
     /**
+     * @var array
+     */
+    protected $config;
+
+    /**
      * GuzzleBasedProvider constructor.
      *
      * @param array $config
@@ -19,14 +24,24 @@ trait GuzzleBasedProvider
      */
     public function __construct(array $config)
     {
+        $this->config = $config;
+
         $clientConfig = [
             'base_uri' => $config['options']['url'] . ':' . $config['options']['port']
         ];
 
-        if (isset($config['options'], $config['options']['guzzleOptions'])) {
+        if (isset($config['options']['guzzleOptions'])) {
             $clientConfig = array_merge($clientConfig, $config['options']['guzzleOptions']);
         }
 
         $this->transport = new Client($clientConfig);
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 }

@@ -11,8 +11,8 @@ class Util
      */
     public static function messageSortByCreatedAt($messageA, $messageB)
     {
-        $sortKeyA = $messageA['created_at'] . $messageA['id'];
-        $sortKeyB = $messageB['created_at'] . $messageB['id'];
+        $sortKeyA = strtotime($messageA['created_at']) . $messageA['id'];
+        $sortKeyB = strtotime($messageB['created_at']) . $messageB['id'];
 
         return ($sortKeyA > $sortKeyB) ? -1 : 1;
     }

@@ -19,6 +19,7 @@ script:
   - php vendor/bin/codecept run -d acceptance MailCatcherCest
   - php vendor/bin/codecept run -d acceptance MailDumpCest
   - php vendor/bin/codecept run -d acceptance LatherMailCest
+  - php vendor/bin/codecept run -d acceptance MailTrapCest
 
 sudo: false
 
