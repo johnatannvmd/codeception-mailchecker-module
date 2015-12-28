@@ -1,4 +1,8 @@
 <?php
+if(getenv('MAIL_SERVICE_HOST') === false) {
+    throw new Exception('Environment variable MAIL_SERVICE_HOST was not set.');
+}
+
 require_once 'acceptance/BaseMailChecker.php';
 require_once '_support/BaseMailerHelper.php';
 
