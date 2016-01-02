@@ -1,5 +1,4 @@
 service_name: travis-ci
 
-src_dir: ../src
-coverage_clover: tests/_output/acceptance.xml
-json_path: tests/_output/acceptance.json
+coverage_clover: test/tests/_output/acceptance.xml
+json_path: test/tests/_output/acceptance.json
