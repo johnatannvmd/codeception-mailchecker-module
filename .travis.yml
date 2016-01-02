@@ -15,11 +15,10 @@ before_install:
   - php vendor/bin/codecept build
 
 script:
-  - php vendor/bin/codecept run -d acceptance ZendMailCest
-  - php vendor/bin/codecept run -d acceptance MailCatcherCest
-  - php vendor/bin/codecept run -d acceptance MailDumpCest
-  - php vendor/bin/codecept run -d acceptance LatherMailCest
-  - php vendor/bin/codecept run -d acceptance MailTrapCest
+  - php vendor/bin/codecept run -d --coverage-xml acceptance.xml
+
+after_success:
+  - travis_retry php vendor/bin/coveralls
 
 sudo: false
 

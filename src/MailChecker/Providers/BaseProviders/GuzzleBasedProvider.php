@@ -36,12 +36,4 @@ trait GuzzleBasedProvider
 
         $this->transport = new Client($clientConfig);
     }
-
-    /**
-     * @return array
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
 }
