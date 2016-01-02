@@ -18,8 +18,6 @@ if(getenv('MAIL_TRAP_APITOKEN') === false) {
 require_once 'acceptance/BaseMailChecker.php';
 require_once '_support/BaseMailerHelper.php';
 
-date_default_timezone_set('Etc/GMT');
-
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers'] = [];
 
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['MailDump'] = [

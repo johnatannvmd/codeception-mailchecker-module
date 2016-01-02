@@ -1,6 +1,7 @@
 # Codeception MailChecker Module
 
 [![Build Status](https://travis-ci.org/johnatannvmd/codeception-mailchecker-module.svg?branch=master)](https://travis-ci.org/johnatannvmd/codeception-mailchecker-module)
+[![Coverage Status](https://coveralls.io/repos/johnatannvmd/codeception-mailchecker-module/badge.svg?branch=master&service=github)](https://coveralls.io/github/johnatannvmd/codeception-mailchecker-module?branch=master)
 
 This module will let you test emails that are sent during your Codeception
 acceptance tests.
