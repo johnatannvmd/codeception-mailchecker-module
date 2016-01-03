@@ -19,7 +19,7 @@ script:
   - php vendor/bin/codecept run -d --coverage-xml acceptance.xml
 
 after_success:
-  - LEVEL_UP=`pwd`/.. && php vendor/bin/coveralls -v --exclude-no-stmt -c test/.coveralls.yml -r `realpath $LEVEL_UP`
+  - LEVEL_UP=`pwd`/.. && php vendor/bin/coveralls -v --exclude-no-stmt -c test/.coveralls.yml -r `readlink -f $LEVEL_UP`
 
 sudo: false
 
