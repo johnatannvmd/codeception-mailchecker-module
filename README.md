@@ -13,7 +13,7 @@ It supports several mail providers:
 
 * [MailCatcher](http://mailcatcher.me/)
 * [MailDump](https://github.com/ThiefMaster/maildump)
-* [ZenMail](https://github.com/zendframework/zend-mail)
+* [ZendMail](https://github.com/zendframework/zend-mail)
 * [LatherMail](https://github.com/reclosedev/lathermail)
 * [Mailtrap](https://mailtrap.io)
 * [Imap Server] included
