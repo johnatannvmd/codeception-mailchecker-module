@@ -11,7 +11,8 @@ class MailProviderFactory
         'MailDump' => '\\MailChecker\\Providers\\MailDump',
         'ZendMail' => '\\MailChecker\\Providers\\ZendMail',
         'LatherMail' => '\\MailChecker\\Providers\\LatherMail',
-        'MailTrap' => '\\MailChecker\\Providers\\MailTrap'
+        'MailTrap' => '\\MailChecker\\Providers\\MailTrap',
+        'ImapMail' => '\\MailChecker\\Providers\\ImapMail'
     ];
 
     /**

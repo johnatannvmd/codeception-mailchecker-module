@@ -1,6 +1,7 @@
 <?php
 namespace MailChecker\Providers;
 
+use MailChecker\Providers\BaseProviders\RawMailProvider;
 use Zend\Mail\Message;
 
 /**
@@ -18,6 +19,8 @@ use Zend\Mail\Message;
  */
 class ZendMail implements IProvider
 {
+    use RawMailProvider;
+
     /**
      * @var string
      */
@@ -61,32 +64,29 @@ class ZendMail implements IProvider
     /**
      * @inheritdoc
      */
+    public function messagesCount()
+    {
+        return count(glob($this->path . '/*.' . $this->extension));
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function lastMessageFrom($address)
     {
-        $messagesFrom = [];
+        $lastMessage = null;
         $messages = $this->messages();
-
-        if (empty($messages)) {
-            return [];
+        if (is_null($messages)) {
+            return null;
         }
 
         foreach ($messages as $message) {
-            if ($message->getTo()->has($address)) {
-                $messagesFrom[] = $message;
+            if ($message->containsTo($address)) {
+                $lastMessage = $message;
             }
         }
 
-        if (!empty($messagesFrom)) {
-            /** @var \Zend\Mail\Message $lastMessage */
-            $lastMessage = max($messagesFrom);
-
-            return [
-                'subject' => $lastMessage->getSubject(),
-                'source' => $lastMessage->getBodyText()
-            ];
-        }
-
-        return [];
+        return $lastMessage;
     }
 
     /**
@@ -96,30 +96,26 @@ class ZendMail implements IProvider
     {
         $messages = $this->messages();
 
-        if (empty($messages)) {
-            return [];
+        if (is_null($messages)) {
+            return null;
         }
 
-        /** @var \Zend\Mail\Message $lastMessage */
-        $lastMessage = end($messages);
-
-        return [
-            'subject' => $lastMessage->getSubject(),
-            'source' => $lastMessage->getBodyText()
-        ];
+        return array_pop($messages);
     }
 
     /**
-     * @inheritdoc
-     * @return \Zend\Mail\Message[]
+     * @return \MailChecker\Models\Message[]|null
      */
-    public function messages()
+    private function messages()
     {
         $messages = glob($this->path . '/*.' . $this->extension);
+        if (empty($messages)) {
+            return null;
+        }
 
         return array_map(
             function ($message) {
-                return Message::fromString(file_get_contents($message));
+                return $this->getMessage(file_get_contents($message));
             },
             $messages
         );

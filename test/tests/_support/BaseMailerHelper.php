@@ -8,7 +8,7 @@ abstract class BaseMailerHelper extends Module
 {
     abstract public function _init(array $providerConfig);
 
-    abstract public function sendEmail($from, $to, $subject, $body);
+    abstract public function sendEmail($from, $to, $cc, $subject, $body, $attachmentFilename);
 
     public final function haveMailProvider($provider)
     {

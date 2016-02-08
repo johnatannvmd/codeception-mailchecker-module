@@ -19,8 +19,5 @@ class MailTrapCest
     public function _before(\Codeception\Module\SmtpMailerHelper $mailer)
     {
         $this->_baseBefore($mailer);
-
-        // Wait between tests. MailTrap drop frequent requests with "Requested action not taken: too many emails per second"
-        sleep(1);
     }
 }

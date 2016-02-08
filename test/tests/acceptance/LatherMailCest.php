@@ -14,6 +14,7 @@ class LatherDumpCest
 
     use BaseMailChecker {
         _before as _baseBefore;
+        sendEmails as _baseSendEmails;
     }
 
     protected function getProvider()
@@ -21,30 +22,20 @@ class LatherDumpCest
         return 'LatherMail';
     }
 
-    protected function sendEmails(AcceptanceTester $I)
+    /**
+     * @before clearMailbox
+     *
+     * @param \AcceptanceTester $I
+     */
+    public function sendEmails(AcceptanceTester $I)
     {
-        $I->clearMailbox();
-
         /** @var \Swift_SmtpTransport $transport */
         $transport = $this->mailer->getMailer()->getTransport();
 
-        $transport->setUsername('to' . sq(1) . '@othermailbox.com');
+        $transport->setUsername('to' . sqs(1) . '@othermailbox.com');
         $transport->setPassword($this->password);
-        $this->mailer->sendEmail(
-            'from_' . sq(1) . '@somemailbox.com',
-            'to' . sq(1) . '@othermailbox.com',
-            'Subject ' . sq(1),
-            'Body ' . sq(1)
-        );
 
-        $transport->setUsername('to' . sq(2) . '@othermailbox.com');
-        $transport->setPassword($this->password);
-        $this->mailer->sendEmail(
-            'from_' . sq(2) . '@somemailbox.com',
-            'to' . sq(2) . '@othermailbox.com',
-            'Subject ' . sq(2),
-            'Body ' . sq(2)
-        );
+        $this->_baseSendEmails($I);
     }
 
     public function _before(\Codeception\Module\SmtpMailerHelper $mailer)

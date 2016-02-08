@@ -15,10 +15,13 @@
     }
   ],
   "require": {
-    "codeception/codeception": "^2.0",
+    "ext-mailparse": "*",
+    "ext-imap": "*",
+    "codeception/codeception": "2.1.x-dev",
     "johnatannvmd/codeception-mailchecker-module": "^1",
     "swiftmailer/swiftmailer": "^5.0",
     "zendframework/zend-mail": "^2.3",
-    "satooshi/php-coveralls": "~1.0"
+    "satooshi/php-coveralls": "~1.0",
+    "php-mime-mail-parser/php-mime-mail-parser": "~2.0"
   }
 }

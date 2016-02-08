@@ -1,6 +1,8 @@
 <?php
 namespace MailChecker\Providers;
 
+use MailChecker\Models\Message;
+
 interface IProvider
 {
     /**
@@ -15,21 +17,21 @@ interface IProvider
      *
      * @param $address
      *
-     * @return array
+     * @return Message|null
      */
     public function lastMessageFrom($address);
 
     /**
      * Get last message from provider
      *
-     * @return array
+     * @return Message|null
      */
     public function lastMessage();
 
     /**
-     * Get all messages from provider
+     * Get messages count from provider
      *
-     * @return array
+     * @return int
      */
-    public function messages();
+    public function messagesCount();
 }

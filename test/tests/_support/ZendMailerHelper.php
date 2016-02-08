@@ -4,6 +4,7 @@ namespace Codeception\Module;
 use Zend\Mail\Message;
 use Zend\Mail\Transport\File;
 use Zend\Mail\Transport\FileOptions;
+use Zend\Mime\Mime;
 
 class ZendMailerHelper extends BaseMailerHelper
 {
@@ -25,14 +26,36 @@ class ZendMailerHelper extends BaseMailerHelper
         $this->transport = new File($transportOptions);
     }
 
-    public function sendEmail($from, $to, $subject, $body)
+    public function sendEmail($from, $to, $cc, $subject, $body, $attachmentFilename)
     {
         $message = new Message();
         $message->setFrom($from);
         $message->setTo($to);
+        $message->setCc($cc);
         $message->setSubject($subject);
-        $message->setBody($body);
+
+        $mimeMessage = new \Zend\Mime\Message();
+
+        $part = new \Zend\Mime\Part($body);
+        $part->setType(Mime::TYPE_TEXT);
+        $part->setCharset('UTF-8');
+        $mimeMessage->addPart($part);
+
+        $part = new \Zend\Mime\Part('<p>' . $body . '<p>');
+        $part->setType(Mime::TYPE_HTML);
+        $part->setCharset('UTF-8');
+        $mimeMessage->addPart($part);
+
+        $part = new \Zend\Mime\Part($body);
+        $part->setType(Mime::TYPE_OCTETSTREAM);
+        $part->setEncoding(Mime::ENCODING_BASE64);
+        $part->setFileName($attachmentFilename);
+        $mimeMessage->addPart($part);
+
+        $message->setBody($mimeMessage);
 
         $this->transport->send($message);
+
+        $this->debugSection('ZendMailer', $subject . ' ' . $from . ' -> ' . $to);
     }
 }

@@ -63,7 +63,7 @@ class RightProvider implements \MailChecker\Providers\IProvider
     {
     }
 
-    public function messages()
+    public function messagesCount()
     {
     }
 }
