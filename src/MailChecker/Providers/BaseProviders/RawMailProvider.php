@@ -57,7 +57,6 @@ trait RawMailProvider
         /** @var \PhpMimeMailParser\Attachment $messageAttachment */
         foreach ($parser->getAttachments() as $messageAttachment) {
             $attachment = new Attachment();
-            $attachment->setId($messageAttachment->getContentID());
             $attachment->setType($messageAttachment->getContentType());
             $attachment->setFilename($messageAttachment->getFilename());
 

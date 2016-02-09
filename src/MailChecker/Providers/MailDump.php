@@ -34,7 +34,7 @@ class MailDump implements IProvider
     /**
      * @inheritdoc
      */
-    public function lastMessageFrom($address)
+    public function lastMessageTo($address)
     {
         $lastMessage = null;
         $messages = $this->messages();

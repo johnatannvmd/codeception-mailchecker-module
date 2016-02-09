@@ -13,17 +13,12 @@ trait ImapLibBasedProvider
     /**
      * @var string
      */
-    private $user;
-
-    /**
-     * @var string
-     */
-    private $password;
-
-    /**
-     * @var string
-     */
     private $service;
+
+    /**
+     * @var string[]
+     */
+    private $credentials = [];
 
     public function __construct(array $config)
     {
@@ -46,13 +41,23 @@ trait ImapLibBasedProvider
         }
 
         $this->mailbox = "{{$config['options']['host']}:{$config['options']['port']}{$this->service}{$flags}}INBOX{$folder}";
-        $this->user = $config['options']['user'];
-        $this->password = $config['options']['password'];
+
+        $this->credentials = $config['options']['credentials'];
     }
 
-    private function openMailbox()
+    /**
+     * @param $email
+     *
+     * @return resource
+     * @throws \MailChecker\Exceptions\MailProviderException
+     */
+    private function openMailbox($email)
     {
-        $mailboxResource = imap_open($this->mailbox, $this->user, $this->password);
+        if (!isset($this->credentials[$email])) {
+            throw new MailProviderException("Email address: '{$email}' does not found in credentials config");
+        }
+
+        $mailboxResource = imap_open($this->mailbox, $email, $this->credentials[$email]);
 
         if ($mailboxResource === false) {
             throw new MailProviderException('Can not open mailbox: ' . imap_last_error());

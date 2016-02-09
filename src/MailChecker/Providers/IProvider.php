@@ -19,7 +19,7 @@ interface IProvider
      *
      * @return Message|null
      */
-    public function lastMessageFrom($address);
+    public function lastMessageTo($address);
 
     /**
      * Get last message from provider

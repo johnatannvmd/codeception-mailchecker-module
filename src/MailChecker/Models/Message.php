@@ -4,11 +4,6 @@ namespace MailChecker\Models;
 class Message
 {
     /**
-     * @var string
-     */
-    private $id;
-
-    /**
      * @var \DateTime
      */
     private $date;
@@ -151,14 +146,6 @@ class Message
         }
 
         return false;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

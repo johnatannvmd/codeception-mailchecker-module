@@ -113,7 +113,7 @@ class MailChecker extends Module
     public function seeInLastEmailTo($address, $expected)
     {
         $this->seeInEmail(
-            $this->provider->lastMessageFrom($address),
+            $this->provider->lastMessageTo($address),
             $expected
         );
     }
@@ -127,7 +127,7 @@ class MailChecker extends Module
     public function dontSeeInLastEmailTo($address, $unexpected)
     {
         $this->dontSeeInEmail(
-            $this->provider->lastMessageFrom($address),
+            $this->provider->lastMessageTo($address),
             $unexpected
         );
     }
@@ -141,7 +141,7 @@ class MailChecker extends Module
     public function seeInLastEmailSubjectTo($address, $expected)
     {
         $this->seeInEmailSubject(
-            $this->provider->lastMessageFrom($address),
+            $this->provider->lastMessageTo($address),
             $expected
         );
     }
@@ -155,7 +155,7 @@ class MailChecker extends Module
     public function dontSeeInLastEmailSubjectTo($address, $unexpected)
     {
         $this->dontSeeInEmailSubject(
-            $this->provider->lastMessageFrom($address),
+            $this->provider->lastMessageTo($address),
             $unexpected
         );
     }
@@ -199,7 +199,7 @@ class MailChecker extends Module
     public function grabMatchesFromLastEmailTo($address, $regex)
     {
         return $this->grabMatchesFromEmail(
-            $this->provider->lastMessageFrom($address),
+            $this->provider->lastMessageTo($address),
             $regex
         );
     }

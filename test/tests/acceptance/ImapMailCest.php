@@ -11,43 +11,39 @@ class ImapMailCest
         return 'ImapMail';
     }
 
-    public function sendEmails(AcceptanceTester $I)
+    protected function getFromAddress()
     {
-        $this->mailer->sendEmail(
-            'from_' . sqs('from') . '@somemailbox.com',
-            'to' . sqs('toFirst') . '@othermailbox.com',
-            'cc' . sqs('ccFirst') . '@othermailbox.com',
-            'Subject ' . sqs('first'),
-            'Body ' . sqs('first'),
-            'file' . sqs('first') . '.ext'
-        );
+        return 'admin@127.0.0.1';
+    }
 
-        $this->mailer->sendEmail(
-            'from_' . sqs('from') . '@somemailbox.com',
-            'to' . sqs('toFirst') . '@othermailbox.com',
-            'cc' . sqs('ccFirst') . '@othermailbox.com',
-            'Subject ' . sqs('second'),
-            'Body ' . sqs('second'),
-            'file' . sqs('second') . '.ext'
-        );
+    protected function getToFirstAddress()
+    {
+        return 'first@127.0.0.1';
+    }
 
-        $this->mailer->sendEmail(
-            'from_' . sqs('from') . '@somemailbox.com',
-            'to' . sqs('toSecond') . '@othermailbox.com',
-            'cc' . sqs('ccSecond') . '@othermailbox.com',
-            'Subject ' . sqs('third'),
-            'Body ' . sqs('third'),
-            'file' . sqs('third') . '.ext'
-        );
+    protected function getToSecondAddress()
+    {
+        return 'second@127.0.0.1';
+    }
 
-        $this->mailer->sendEmail(
-            'from_' . sqs('from') . '@somemailbox.com',
-            'to' . sqs('toThird') . '@othermailbox.com',
-            'cc' . sqs('ccThird') . '@othermailbox.com',
-            'Subject ' . sqs('last'),
-            'Body ' . sqs('last'),
-            'file' . sqs('last') . '.ext'
-        );
+    protected function getToThirdAddress()
+    {
+        return 'third@127.0.0.1';
+    }
+
+    protected function getCcFirstAddress()
+    {
+        return 'cc-first@127.0.0.1';
+    }
+
+    protected function getCcSecondAddress()
+    {
+        return 'cc-second@127.0.0.1';
+    }
+
+    protected function getCcThirdAddress()
+    {
+        return 'cc-third@127.0.0.1';
     }
 
     public function _before(\Codeception\Module\SmtpMailerHelper $mailer)

@@ -7,8 +7,8 @@ array_map(
     },
     [
         'MAIL_SERVICE_HOST', 'MAIL_TRAP_USER', 'MAIL_TRAP_PASSWORD', 'MAIL_TRAP_APITOKEN',
-        'IMAP_HOST', 'IMAP_PORT', 'IMAP_USER', 'IMAP_PWD', 'IMAP_SMTP_HOST', 'IMAP_SMTP_PORT',
-        'IMAP_SMTP_PWD', 'IMAP_SMTP_USER'
+        'IMAP_HOST', 'IMAP_PORT', 'IMAP_USER_FIRST', 'IMAP_USER_SECOND', 'IMAP_USER_THIRD', 'IMAP_PWD',
+        'IMAP_SMTP_HOST', 'IMAP_SMTP_PORT', 'IMAP_SMTP_PWD', 'IMAP_SMTP_USER'
     ]
 );
 
@@ -67,10 +67,13 @@ require_once '_support/BaseMailerHelper.php';
     'options' => [
         'host' => getenv('IMAP_HOST'),
         'port' => getenv('IMAP_PORT'),
-        'user' => getenv('IMAP_USER'),
-        'password' => getenv('IMAP_PWD'),
+        'service' => 'imap',
+        'credentials' => [
+            getenv('IMAP_USER_FIRST') => getenv('IMAP_PWD'),
+            getenv('IMAP_USER_SECOND') => getenv('IMAP_PWD'),
+            getenv('IMAP_USER_THIRD') => getenv('IMAP_PWD'),
+        ],
         'flags' => 'novalidate-cert',
-        'service' => 'imap'
     ],
     'smtpHost' => getenv('IMAP_SMTP_HOST'),
     'smtpPort' => getenv('IMAP_SMTP_PORT'),

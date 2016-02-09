@@ -8,6 +8,41 @@ trait BaseMailChecker
 
     abstract protected function getProvider();
 
+    protected function getFromAddress()
+    {
+        return 'from' . sqs('from') . '@somemailbox.com';
+    }
+
+    protected function getToFirstAddress()
+    {
+        return 'to' . sqs('toFirst') . '@othermailbox.com';
+    }
+
+    protected function getToSecondAddress()
+    {
+        return 'to' . sqs('toSecond') . '@othermailbox.com';
+    }
+
+    protected function getToThirdAddress()
+    {
+        return 'to' . sqs('toThird') . '@othermailbox.com';
+    }
+
+    protected function getCcFirstAddress()
+    {
+        return 'cc' . sqs('toFirst') . '@othermailbox.com';
+    }
+
+    protected function getCcSecondAddress()
+    {
+        return 'cc' . sqs('toSecond') . '@othermailbox.com';
+    }
+
+    protected function getCcThirdAddress()
+    {
+        return 'cc' . sqs('toThird') . '@othermailbox.com';
+    }
+
     public function _before(\Codeception\Module\BaseMailerHelper $mailer)
     {
         $this->mailer = $mailer;
@@ -23,36 +58,42 @@ trait BaseMailChecker
     public function sendEmails(AcceptanceTester $I)
     {
         $this->mailer->sendEmail(
-            'from_' . sqs('from') . '@somemailbox.com',
-            'to' . sqs('toFirst') . '@othermailbox.com',
-            'cc' . sqs('ccFirst') . '@othermailbox.com',
+            $this->getFromAddress(),
+            $this->getToFirstAddress(),
+            $this->getCcFirstAddress(),
             'Subject ' . sqs('first'),
             'Body ' . sqs('first'),
             'file' . sqs('first') . '.ext'
         );
 
+        sleep(1);
+
         $this->mailer->sendEmail(
-            'from_' . sqs('from') . '@somemailbox.com',
-            'to' . sqs('toFirst') . '@othermailbox.com',
-            'cc' . sqs('ccFirst') . '@othermailbox.com',
+            $this->getFromAddress(),
+            $this->getToFirstAddress(),
+            $this->getCcFirstAddress(),
             'Subject ' . sqs('second'),
             'Body ' . sqs('second'),
             'file' . sqs('second') . '.ext'
         );
 
+        sleep(1);
+
         $this->mailer->sendEmail(
-            'from_' . sqs('from') . '@somemailbox.com',
-            'to' . sqs('toSecond') . '@othermailbox.com',
-            'cc' . sqs('ccSecond') . '@othermailbox.com',
+            $this->getFromAddress(),
+            $this->getToSecondAddress(),
+            $this->getCcSecondAddress(),
             'Subject ' . sqs('third'),
             'Body ' . sqs('third'),
             'file' . sqs('third') . '.ext'
         );
 
+        sleep(1);
+
         $this->mailer->sendEmail(
-            'from_' . sqs('from') . '@somemailbox.com',
-            'to' . sqs('toThird') . '@othermailbox.com',
-            'cc' . sqs('ccThird') . '@othermailbox.com',
+            $this->getFromAddress(),
+            $this->getToThirdAddress(),
+            $this->getCcThirdAddress(),
             'Subject ' . sqs('last'),
             'Body ' . sqs('last'),
             'file' . sqs('last') . '.ext'
@@ -125,8 +166,8 @@ trait BaseMailChecker
      */
     public function seeInLastEmailTo(AcceptanceTester $I)
     {
-        $I->wantTo('See in last email to ' . 'to' . sqs('toFirst') . '@othermailbox.com');
-        $I->seeInLastEmailTo('to' . sqs('toFirst') . '@othermailbox.com', 'Body ' . sqs('second'));
+        $I->wantTo('See in last email to ' . $this->getToFirstAddress());
+        $I->seeInLastEmailTo($this->getToFirstAddress(), 'Body ' . sqs('second'));
     }
 
     /**
@@ -136,8 +177,8 @@ trait BaseMailChecker
      */
     public function dontSeeInLastEmailTo(AcceptanceTester $I)
     {
-        $I->wantTo('Do not see in last email to ' . 'to' . sqs('toFirst'). '@othermailbox.com');
-        $I->dontSeeInLastEmailTo('to' . sqs('toFirst') . '@othermailbox.com', 'Body ' . sqs('last'));
+        $I->wantTo('Do not see in last email to ' . $this->getToFirstAddress());
+        $I->dontSeeInLastEmailTo($this->getToFirstAddress(), 'Body ' . sqs('last'));
     }
 
     /**
@@ -147,8 +188,8 @@ trait BaseMailChecker
      */
     public function seeInLastEmailSubjectTo(AcceptanceTester $I)
     {
-        $I->wantTo('See in last email\'s subject to ' . 'to' . sqs('toFirst') . '@othermailbox.com');
-        $I->seeInLastEmailSubjectTo('to' . sqs('toFirst') . '@othermailbox.com', 'Subject ' . sqs('second'));
+        $I->wantTo('See in last email\'s subject to ' . $this->getToFirstAddress());
+        $I->seeInLastEmailSubjectTo($this->getToFirstAddress(), 'Subject ' . sqs('second'));
     }
 
     /**
@@ -158,8 +199,8 @@ trait BaseMailChecker
      */
     public function dontSeeInLastEmailSubjectTo(AcceptanceTester $I)
     {
-        $I->wantTo('Do not see in last email\'s subject to ' . 'to' . sqs('toFirst') . '@othermailbox.com');
-        $I->dontSeeInLastEmailSubjectTo('to' . sqs('toFirst') . '@othermailbox.com', 'Subject ' . sqs('last'));
+        $I->wantTo('Do not see in last email\'s subject to ' . $this->getToFirstAddress());
+        $I->dontSeeInLastEmailSubjectTo($this->getToFirstAddress(), 'Subject ' . sqs('last'));
     }
 
     /**
@@ -195,8 +236,8 @@ trait BaseMailChecker
      */
     public function grabMatchesFromLastEmailTo(AcceptanceTester $I)
     {
-        $I->wantTo('Grab matches from last email to ' . 'to' . sqs('toFirst') . '@othermailbox.com');
-        $result = $I->grabMatchesFromLastEmailTo('to' . sqs('toFirst') . '@othermailbox.com', '/Body ([_a-z0-9]+)/i');
+        $I->wantTo('Grab matches from last email to ' . $this->getToFirstAddress());
+        $result = $I->grabMatchesFromLastEmailTo($this->getToFirstAddress(), '/Body ([_a-z0-9]+)/i');
 
         $I->assertEquals(sqs('second'), $result[1], 'Can not find matches in email body');
     }
@@ -208,8 +249,8 @@ trait BaseMailChecker
      */
     public function grabFromLastEmailTo(AcceptanceTester $I)
     {
-        $I->wantTo('Grab from last email to ' . 'to' . sqs('toFirst') . '@othermailbox.com');
-        $result = $I->grabFromLastEmailTo('to' . sqs('toFirst') . '@othermailbox.com', '/Body ([_a-z0-9]+)/i');
+        $I->wantTo('Grab from last email to ' . $this->getToFirstAddress());
+        $result = $I->grabFromLastEmailTo($this->getToFirstAddress(), '/Body ([_a-z0-9]+)/i');
 
         $I->assertEquals('Body ' . sqs('second'), $result, 'Can not find matches in email body');
     }

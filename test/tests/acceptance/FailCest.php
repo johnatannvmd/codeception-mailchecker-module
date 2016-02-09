@@ -55,7 +55,7 @@ class RightProvider implements \MailChecker\Providers\IProvider
     {
     }
 
-    public function lastMessageFrom($address)
+    public function lastMessageTo($address)
     {
     }
 

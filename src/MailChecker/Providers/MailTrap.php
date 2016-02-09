@@ -68,7 +68,7 @@ class MailTrap implements IProvider
     /**
      * @inheritdoc
      */
-    public function lastMessageFrom($address)
+    public function lastMessageTo($address)
     {
         $messages = $this->messages(['search' => $address]);
         if (is_null($messages)) {
