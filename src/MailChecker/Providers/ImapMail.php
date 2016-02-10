@@ -2,8 +2,6 @@
 namespace MailChecker\Providers;
 
 use MailChecker\Exceptions\MailProviderException;
-use MailChecker\Models\Message;
-use MailChecker\Providers\BaseProviders\ImapLibBasedProvider;
 use MailChecker\Providers\BaseProviders\RawMailProvider;
 use MailChecker\Util;
 
@@ -29,9 +27,51 @@ use MailChecker\Util;
  */
 class ImapMail implements IProvider
 {
-    use ImapLibBasedProvider;
     use RawMailProvider;
 
+    /**
+     * @var string
+     */
+    private $mailbox;
+
+    /**
+     * @var string
+     */
+    private $service;
+
+    /**
+     * @var string[]
+     */
+    private $credentials = [];
+
+    public function __construct(array $config)
+    {
+        if (isset($config['options']['service']) && $config['options']['service'] == 'pop3') {
+            $this->service = '/pop3';
+        } else {
+            $this->service = '/imap';
+        }
+
+        if (isset($config['options']['flags']) && $config['options']['flags'] !== null) {
+            $flags = '/' . $config['options']['flags'];
+        } else {
+            $flags = '';
+        }
+
+        if (isset($config['options']['folder'])) {
+            $folder = '.' . $config['options']['folder'];
+        } else {
+            $folder = '';
+        }
+
+        $this->mailbox = "{{$config['options']['host']}:{$config['options']['port']}{$this->service}{$flags}}INBOX{$folder}";
+
+        $this->credentials = $config['options']['credentials'];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function clear()
     {
         foreach ($this->credentials as $email => $password) {
@@ -41,6 +81,9 @@ class ImapMail implements IProvider
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function messagesCount()
     {
         $total = 0;
@@ -84,7 +127,7 @@ class ImapMail implements IProvider
     }
 
     /**
-     * @param null $from
+     * @param string|null $from
      *
      * @return \MailChecker\Models\Message[]
      * @throws \MailChecker\Exceptions\MailProviderException
@@ -108,6 +151,11 @@ class ImapMail implements IProvider
         return $messages;
     }
 
+    /**
+     * @param $mailboxResource
+     *
+     * @return array
+     */
     private function parseMessages($mailboxResource)
     {
         $messages = imap_sort($mailboxResource, SORTARRIVAL, 0, SE_UID, 'ALL');
@@ -153,5 +201,26 @@ class ImapMail implements IProvider
         if ($status === false) {
             throw new MailProviderException('Can not expunge mailbox: ' . imap_last_error());
         }
+    }
+
+    /**
+     * @param $email
+     *
+     * @return resource
+     * @throws \MailChecker\Exceptions\MailProviderException
+     */
+    private function openMailbox($email)
+    {
+        if (!isset($this->credentials[$email])) {
+            throw new MailProviderException("Email address: '{$email}' does not found in credentials config");
+        }
+
+        $mailboxResource = imap_open($this->mailbox, $email, $this->credentials[$email], OP_SILENT);
+
+        if ($mailboxResource === false) {
+            throw new MailProviderException('Can not open mailbox: ' . imap_last_error());
+        }
+
+        return $mailboxResource;
     }
 }

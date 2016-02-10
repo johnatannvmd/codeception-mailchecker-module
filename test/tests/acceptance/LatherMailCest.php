@@ -32,7 +32,7 @@ class LatherDumpCest
         /** @var \Swift_SmtpTransport $transport */
         $transport = $this->mailer->getMailer()->getTransport();
 
-        $transport->setUsername('to' . sqs(1) . '@othermailbox.com');
+        $transport->setUsername($this->getToFirstAddress());
         $transport->setPassword($this->password);
 
         $this->_baseSendEmails($I);

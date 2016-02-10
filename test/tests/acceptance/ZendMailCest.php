@@ -1,7 +1,7 @@
 <?php
 class ZendMailCest
 {
-    /*use BaseMailChecker {
+    use BaseMailChecker {
         _before as _baseBefore;
     }
 
@@ -13,5 +13,5 @@ class ZendMailCest
     public function _before(\Codeception\Module\ZendMailerHelper $mailer)
     {
         $this->_baseBefore($mailer);
-    }*/
+    }
 }

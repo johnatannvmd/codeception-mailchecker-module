@@ -67,7 +67,7 @@ require_once '_support/BaseMailerHelper.php';
     'options' => [
         'host' => getenv('IMAP_HOST'),
         'port' => getenv('IMAP_PORT'),
-        'service' => 'imap',
+        'service' => 'pop3',
         'credentials' => [
             getenv('IMAP_USER_FIRST') => getenv('IMAP_PWD'),
             getenv('IMAP_USER_SECOND') => getenv('IMAP_PWD'),

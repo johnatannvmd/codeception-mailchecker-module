@@ -6,6 +6,9 @@ trait BaseMailChecker
      */
     protected $mailer;
 
+    /**
+     * @return string Mail provider name
+     */
     abstract protected function getProvider();
 
     protected function getFromAddress()
