@@ -70,7 +70,7 @@ class MailTrap implements IProvider
      */
     public function lastMessageTo($address)
     {
-        $messages = $this->messages(['search' => $address]);
+        $messages = $this->getLastMessage(['search' => $address]);
         if (is_null($messages)) {
             return null;
         }
@@ -83,7 +83,7 @@ class MailTrap implements IProvider
      */
     public function lastMessage()
     {
-        $messages = $this->messages();
+        $messages = $this->getLastMessage();
         if (is_null($messages)) {
             return null;
         }
@@ -96,7 +96,7 @@ class MailTrap implements IProvider
      *
      * @return \MailChecker\Models\Message[]|null
      */
-    private function messages($search = null)
+    private function getLastMessage($search = null)
     {
         $options = [];
 
@@ -116,6 +116,11 @@ class MailTrap implements IProvider
         return null;
     }
 
+    /**
+     * @return string
+     *
+     * @throws \MailChecker\Exceptions\MailProviderException
+     */
     private function getDefaultInbox()
     {
         $inboxes = json_decode($this->transport->get('/api/v1/inboxes')->getBody(), true);

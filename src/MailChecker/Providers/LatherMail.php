@@ -1,8 +1,6 @@
 <?php
 namespace MailChecker\Providers;
 
-use MailChecker\Models\Body;
-use MailChecker\Models\Message;
 use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 use MailChecker\Providers\BaseProviders\RawMailProvider;
 
@@ -40,7 +38,7 @@ class LatherMail implements IProvider
      */
     public function lastMessageTo($address)
     {
-        $messages = $this->messages(['recipients.address' => $address]);
+        $messages = $this->getLastMessage(['recipients.address' => $address]);
         if (is_null($messages)) {
             return null;
         }
@@ -53,7 +51,7 @@ class LatherMail implements IProvider
      */
     public function lastMessage()
     {
-        $messages = $this->messages();
+        $messages = $this->getLastMessage();
         if (is_null($messages)) {
             return null;
         }
@@ -76,7 +74,7 @@ class LatherMail implements IProvider
      *
      * @return \MailChecker\Models\Message[]
      */
-    private function messages(array $query = [])
+    private function getLastMessage(array $query = [])
     {
         $options = [];
 

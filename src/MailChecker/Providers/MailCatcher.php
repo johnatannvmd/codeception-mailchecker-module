@@ -36,7 +36,7 @@ class MailCatcher implements IProvider
     public function lastMessageTo($address)
     {
         $lastMessage = null;
-        $messages = $this->messages();
+        $messages = $this->getMessages();
         if (is_null($messages)) {
             return null;
         }
@@ -55,7 +55,7 @@ class MailCatcher implements IProvider
      */
     public function lastMessage()
     {
-        $messages = $this->messages();
+        $messages = $this->getMessages();
 
         if (is_null($messages)) {
             return null;
@@ -77,7 +77,7 @@ class MailCatcher implements IProvider
     /**
      * @return \MailChecker\Models\Message[]|null
      */
-    private function messages()
+    private function getMessages()
     {
         $response = json_decode($this->transport->get('/messages')->getBody()->getContents(), true);
 

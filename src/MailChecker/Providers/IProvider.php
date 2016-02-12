@@ -13,6 +13,13 @@ interface IProvider
     public function clear();
 
     /**
+     * Get messages count from provider
+     *
+     * @return int
+     */
+    public function messagesCount();
+
+    /**
      * Get last message from provider by given email address
      *
      * @param $address
@@ -27,11 +34,4 @@ interface IProvider
      * @return Message|null
      */
     public function lastMessage();
-
-    /**
-     * Get messages count from provider
-     *
-     * @return int
-     */
-    public function messagesCount();
 }

@@ -2,7 +2,6 @@
 namespace MailChecker\Providers;
 
 use MailChecker\Providers\BaseProviders\RawMailProvider;
-use Zend\Mail\Message;
 
 /**
  * Class ZendMail
@@ -75,7 +74,7 @@ class ZendMail implements IProvider
     public function lastMessageTo($address)
     {
         $lastMessage = null;
-        $messages = $this->messages();
+        $messages = $this->getMessages();
         if (is_null($messages)) {
             return null;
         }
@@ -94,7 +93,7 @@ class ZendMail implements IProvider
      */
     public function lastMessage()
     {
-        $messages = $this->messages();
+        $messages = $this->getMessages();
 
         if (is_null($messages)) {
             return null;
@@ -106,7 +105,7 @@ class ZendMail implements IProvider
     /**
      * @return \MailChecker\Models\Message[]|null
      */
-    private function messages()
+    private function getMessages()
     {
         $messages = glob($this->path . '/*.' . $this->extension);
         if (empty($messages)) {
