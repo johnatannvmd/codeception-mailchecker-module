@@ -4,9 +4,6 @@ composer.lock
 composer-test.lock
 vendor/
 
-# Data
-data/*
-
 # Test generated files
 tests/_helpers/_generated/AcceptanceTesterActions.php
 tests/_output/*

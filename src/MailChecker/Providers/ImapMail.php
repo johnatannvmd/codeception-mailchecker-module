@@ -215,6 +215,7 @@ class ImapMail implements IProvider
             throw new MailProviderException("Email address: '{$email}' does not found in credentials config");
         }
 
+        imap_timeout(IMAP_OPENTIMEOUT, 30);
         $mailboxResource = imap_open($this->mailbox, $email, $this->credentials[$email], OP_SILENT);
 
         if ($mailboxResource === false) {

@@ -10,13 +10,13 @@ php:
   - 5.5
 
 before_install:
-  - cd test
-  - tar xvzf tests/_data/poste/data.tar.gz
-  - docker pull johnatannvmd/poste
-  - docker run --name poste -p 1028:25 -p 8083:80 -p 443:443 -p 4110:110 -p 4143:143 -p 4465:465 -p 4587:587 -p 4993:993 -p 4995:995 -v $HOME/johnatannvmd/codeception-mailchecker-module/test/data:/data:Z -t johnatannvmd/poste
-  - docker ps -a
   - if [[ "$TRAVIS_PHP_VERSION" = "5.5" ]]; then pecl install mailparse-2.1.6 ; fi
   - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then pecl install mailparse-2.1.6 ; fi
+  - cd test
+  - composer self-update
+  - composer install
+  - chmod +x run_poste.sh
+  - ./run_poste.sh
   - phpenv config-add travis-php-config.ini
   - gem install mailcatcher
   - mailcatcher --http-ip 127.0.0.1 --http-port 1081 --smtp-ip 127.0.0.1 --smtp-port 1026
@@ -24,8 +24,6 @@ before_install:
   - maildump --http-ip 127.0.0.1 --http-port 1080 --smtp-ip 127.0.0.1 --smtp-port 1025 --pidfile ~/maildump.pid
   - pip install --user lathermail
   - lathermail --api-host 127.0.0.1 --api-port 1082 --smtp-host 127.0.0.1 --smtp-port 1027 </dev/null &>/dev/null &
-  - composer self-update
-  - composer install --prefer-source
   - php vendor/bin/codecept build
 
 script:
