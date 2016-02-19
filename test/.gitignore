@@ -1,9 +1,3 @@
-# Composer files
-composer.phar
-composer.lock
-composer-test.lock
-vendor/
-
 # Test generated files
-tests/_helpers/_generated/AcceptanceTesterActions.php
-tests/_output/*
+_helpers/_generated/AcceptanceTesterActions.php
+_output/*

@@ -57,7 +57,7 @@ require_once '_support/BaseMailerHelper.php';
 
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['ZendMail'] = [
     'options' => [
-        'path' => 'tests/_output',
+        'path' => 'test/_output',
         'extension' => 'eml'
     ]
 ];

@@ -7,3 +7,7 @@ vendor/
 # IDE files
 .idea
 *.iml
+
+# Output
+poste.out
+test.out

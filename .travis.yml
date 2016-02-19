@@ -12,7 +12,6 @@ php:
 before_install:
   - if [[ "$TRAVIS_PHP_VERSION" = "5.5" ]]; then pecl install mailparse-2.1.6 ; fi
   - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then pecl install mailparse-2.1.6 ; fi
-  - cd test
   - phpenv config-add travis-php-config.ini
   - composer self-update
   - composer install --prefer-source
@@ -30,13 +29,13 @@ script:
   - php vendor/bin/codecept run -d --coverage-xml acceptance.xml
 
 after_success:
-  - LEVEL_UP=`pwd`/.. && php vendor/bin/coveralls -v --exclude-no-stmt -c test/.coveralls.yml -r `readlink -f $LEVEL_UP`
+  - php vendor/bin/coveralls -v --exclude-no-stmt -c .coveralls.yml
 
 sudo: false
 
 cache:
   directories:
-    - $HOME/.composer/cache
+    - $HOME/.cache/composer/
     - $HOME/.cache/pip
     - $HOME/.local/lib
     - $HOME/.local/include
