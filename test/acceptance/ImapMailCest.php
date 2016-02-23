@@ -13,7 +13,7 @@ class ImapMailCest
 
     protected function getFromAddress()
     {
-        return 'admin@127.0.0.1';
+        return 'admin@localhost';
     }
 
     protected function getToFirstAddress()

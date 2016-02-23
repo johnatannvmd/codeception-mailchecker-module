@@ -9,7 +9,7 @@ function sendEmail()
     $mailer = Swift_Mailer::newInstance($smtpTransport);
 
     $message = Swift_Message::newInstance('test subject', 'some body');
-    $message->setFrom('first@127.0.0.1');
+    $message->setFrom('first@localhost');
     $message->setTo('admin@127.0.0.1');
 
     $mailer->send($message);
