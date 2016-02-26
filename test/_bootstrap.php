@@ -6,8 +6,7 @@ array_map(
         }
     },
     [
-        'MAIL_SERVICE_HOST', 'MAIL_TRAP_USER', 'MAIL_TRAP_PASSWORD', 'MAIL_TRAP_APITOKEN',
-        'IMAP_PWD', 'IMAP_SMTP_PWD'
+        'MAIL_SERVICE_HOST', 'MAIL_TRAP_USER', 'MAIL_TRAP_PASSWORD', 'MAIL_TRAP_APITOKEN'
     ]
 );
 
@@ -60,21 +59,4 @@ require_once '_support/BaseMailerHelper.php';
         'path' => 'test/_output',
         'extension' => 'eml'
     ]
-];
-
-\Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['ImapMail'] = [
-    'options' => [
-        'host' => '127.0.0.1',
-        'port' => '4143', // 4110 for pop3
-        'service' => 'imap',
-        'credentials' => [
-            'first@127.0.0.1' => getenv('IMAP_PWD'),
-            'second@127.0.0.1' => getenv('IMAP_PWD'),
-            'third@127.0.0.1' => getenv('IMAP_PWD'),
-        ],
-        'flags' => 'novalidate-cert',
-    ],
-    'smtpHost' => '127.0.0.1',
-    'smtpPort' => '1028',
-    'smtpAuth' => ['admin@127.0.0.1', getenv('IMAP_SMTP_PWD')]
 ];

@@ -4,7 +4,7 @@
   "type": "library",
   "keywords": ["codeception", "mail", "acceptance", "test", "mailcatcher", "maildump", "lathermail", "mailtrap"],
   "license": "MIT",
-  "version": "1.1",
+  "version": "1.2",
   "authors": [
     {
       "name": "Evgeniy Tetenchuk",
