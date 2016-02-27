@@ -12,7 +12,7 @@ class LatherDumpCest
      */
     private $password = 'password';
 
-    use BaseMailChecker {
+    use \MailChecker\TestKit\BaseMailChecker {
         _before as _baseBefore;
         sendEmails as _baseSendEmails;
     }
@@ -32,7 +32,7 @@ class LatherDumpCest
         /** @var \Swift_SmtpTransport $transport */
         $transport = $this->mailer->getMailer()->getTransport();
 
-        $transport->setUsername($this->getToFirstAddress());
+        $transport->setUsername($this->getFromAddress());
         $transport->setPassword($this->password);
 
         $this->_baseSendEmails($I);

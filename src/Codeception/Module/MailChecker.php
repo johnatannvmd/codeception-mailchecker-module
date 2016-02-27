@@ -66,6 +66,19 @@ class MailChecker extends Module
     }
 
     /**
+     * Look for the absence of a string in the most recent email
+     *
+     * @param $unexpected
+     */
+    public function dontSeeInLastEmail($unexpected)
+    {
+        $this->dontSeeInEmail(
+            $this->provider->lastMessage(),
+            $unexpected
+        );
+    }
+
+    /**
      * Look for a string in the most recent email subject
      *
      * @param $expected
@@ -88,19 +101,6 @@ class MailChecker extends Module
         $this->dontSeeInEmailSubject(
             $this->provider->lastMessage(),
             $expected
-        );
-    }
-
-    /**
-     * Look for the absence of a string in the most recent email
-     *
-     * @param $unexpected
-     */
-    public function dontSeeInLastEmail($unexpected)
-    {
-        $this->dontSeeInEmail(
-            $this->provider->lastMessage(),
-            $unexpected
         );
     }
 
@@ -157,6 +157,38 @@ class MailChecker extends Module
         $this->dontSeeInEmailSubject(
             $this->provider->lastMessageTo($address),
             $unexpected
+        );
+    }
+
+    public function seeAttachmentFilenameInLastEmail($expectedFilename)
+    {
+        $this->seeInEmailAttachment(
+            $this->provider->lastMessage(),
+            $expectedFilename
+        );
+    }
+
+    public function dontSeeAttachmentFilenameInLastEmail($unexpectedFilename)
+    {
+        $this->dontSeeInEmailAttachment(
+            $this->provider->lastMessage(),
+            $unexpectedFilename
+        );
+    }
+
+    public function seeAttachmentFilenameInLastEmailTo($address, $expectedFilename)
+    {
+        $this->seeInEmailAttachment(
+            $this->provider->lastMessageTo($address),
+            $expectedFilename
+        );
+    }
+
+    public function dontSeeAttachmentFilenameInLastEmailTo($address, $unexpectedFilename)
+    {
+        $this->dontSeeInEmailAttachment(
+            $this->provider->lastMessageTo($address),
+            $unexpectedFilename
         );
     }
 

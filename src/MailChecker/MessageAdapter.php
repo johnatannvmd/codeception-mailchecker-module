@@ -1,6 +1,7 @@
 <?php
 namespace MailChecker;
 
+use MailChecker\Models\Attachment;
 use MailChecker\Models\Message;
 
 /**
@@ -10,6 +11,7 @@ use MailChecker\Models\Message;
  * @method assertContains($expect, $actual, $message)
  * @method assertNotContains($expect, $actual, $message)
  * @method assertNotEmpty($actual, $message)
+ * @method assertEquals($expected, $actual, $message = '')
  */
 trait MessageAdapter
 {
@@ -21,7 +23,6 @@ trait MessageAdapter
      */
     protected function seeInEmailSubject(Message $email, $expected)
     {
-
         $this->assertContains($expected, $email->getSubject(), "Email Subject Contains");
     }
 
@@ -56,6 +57,16 @@ trait MessageAdapter
     protected function dontSeeInEmail(Message $email, $unexpected)
     {
         $this->assertNotContains($unexpected, $email->getBody()[0]->getBody(), "Email Does Not Contain");
+    }
+
+    protected function seeInEmailAttachment(Message $email, $expectedFilename)
+    {
+        $this->assertContains($expectedFilename, $email->getAttachmentsFilesNames(), 'Email Contains Attachment');
+    }
+
+    protected function dontSeeInEmailAttachment(Message $email, $unexpectedFilename)
+    {
+        $this->assertNotContains($unexpectedFilename, $email->getAttachmentsFilesNames(), 'Email Does Not Contains Attachment');
     }
 
     /**

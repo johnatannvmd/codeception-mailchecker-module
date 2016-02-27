@@ -181,6 +181,16 @@ class Message
     }
 
     /**
+     * @return \Generator|string[]
+     */
+    public function getAttachmentsFilesNames()
+    {
+        foreach ($this->getAttachments() as $attachment) {
+            yield $attachment->getFilename();
+        }
+    }
+
+    /**
      * @param \MailChecker\Models\Attachment[] $attachments
      */
     public function setAttachments(array $attachments)
@@ -194,16 +204,5 @@ class Message
     public function addAttachment(Attachment $attachment)
     {
         $this->attachments[] = $attachment;
-    }
-
-    public function __toString()
-    {
-        return $this->getSubject() . ' ' .
-            join(', ', array_map(function (Body $body) {
-                return '"' . $body->getContentType() . '" ' . mb_strlen($body->getBody(), $body->getCharset());
-            }, $this->body)) . ' ' .
-            $this->from . ' -> ' . join(', ', $this->to) . ' ' .
-            'cc: ' . join(', ', $this->cc) . ' ' .
-            'att: ' . count($this->attachments);
     }
 }

@@ -16,6 +16,7 @@ It supports several mail providers:
 * [ZenMail](https://github.com/zendframework/zend-mail)
 * [LatherMail](https://github.com/reclosedev/lathermail)
 * [Mailtrap](https://mailtrap.io)
+* [Imap Server](https://github.com/johnatannvmd/codeception-mailchecker-imap-provider)
 
 ## Installation
 
@@ -25,8 +26,7 @@ for MailDump provider:
     {
         "require-dev": {
             "codeception/codeception": "*",
-            "johnatannvmd/mailchecker-codeception-module": "1.*",
-            "guzzle/guzzle": "3.*"
+            "johnatannvmd/mailchecker-codeception-module": "1.*"
         }
     } 
 
@@ -156,6 +156,56 @@ Example:
 
 * Param $email
 * Param $text
+
+### seeAttachmentFilenameInLastEmail
+
+Checks that the last email have attachment with following filename.
+
+Example:
+
+    <?php
+    $I->seeAttachmentFilenameInLastEmail('expected_journey.ext');
+    ?>
+
+* Param $expectedFilename
+
+### dontSeeAttachmentFilenameInLastEmail)
+
+Checks that the last email does NOT have attachment with following filename.
+
+Example:
+
+    <?php
+    $I->dontSeeAttachmentFilenameInLastEmail('unexpected_journey.ext');
+    ?>
+
+* Param $unexpectedFilename
+
+### seeAttachmentFilenameInLastEmailTo
+
+Checks that the last sent to an address have attachment with following filename.
+
+Example:
+
+    <?php
+    $I->seeAttachmentFilenameInLastEmailTo('admin@example.com', 'expected_journey.ext');
+    ?>
+
+* Param $address
+* Param $expectedFilename
+
+### dontSeeAttachmentFilenameInLastEmailTo
+
+Checks that the last sent to an address does NOT have attachment with following filename.
+
+Example:
+
+    <?php
+    $I->dontSeeAttachmentFilenameInLastEmailTo('admin@example.com', 'unexpected_journey.ext');
+    ?>
+
+* Param $address
+* Param $unexpectedFilename
 
 ### grabMatchesFromLastEmail
 

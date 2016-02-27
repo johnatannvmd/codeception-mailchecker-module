@@ -10,9 +10,6 @@ array_map(
     ]
 );
 
-require_once 'acceptance/BaseMailChecker.php';
-require_once '_support/BaseMailerHelper.php';
-
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers'] = [];
 
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['MailDump'] = [
