@@ -160,6 +160,11 @@ class MailChecker extends Module
         );
     }
 
+    /**
+     * Checks that the last email have attachment with following filename.
+     *
+     * @param $expectedFilename
+     */
     public function seeAttachmentFilenameInLastEmail($expectedFilename)
     {
         $this->seeInEmailAttachment(
@@ -168,6 +173,11 @@ class MailChecker extends Module
         );
     }
 
+    /**
+     * Checks that the last email does NOT have attachment with following filename.
+     *
+     * @param $unexpectedFilename
+     */
     public function dontSeeAttachmentFilenameInLastEmail($unexpectedFilename)
     {
         $this->dontSeeInEmailAttachment(
@@ -176,6 +186,12 @@ class MailChecker extends Module
         );
     }
 
+    /**
+     * Checks that the last sent to an address have attachment with following filename.
+     *
+     * @param $address
+     * @param $expectedFilename
+     */
     public function seeAttachmentFilenameInLastEmailTo($address, $expectedFilename)
     {
         $this->seeInEmailAttachment(
@@ -184,12 +200,39 @@ class MailChecker extends Module
         );
     }
 
+    /**
+     * Checks that the last sent to an address does NOT have attachment with following filename.
+     *
+     * @param $address
+     * @param $unexpectedFilename
+     */
     public function dontSeeAttachmentFilenameInLastEmailTo($address, $unexpectedFilename)
     {
         $this->dontSeeInEmailAttachment(
             $this->provider->lastMessageTo($address),
             $unexpectedFilename
         );
+    }
+
+    /**
+     * Asserts that a certain number of attachments found in the last email.
+     *
+     * @param $expected
+     */
+    public function seeAttachmentsCountInLastEmail($expected)
+    {
+        $this->assertEquals($expected, $this->getNumberOfAttachments($this->provider->lastMessage()));
+    }
+
+    /**
+     * Asserts that a certain number of attachments found in the last email to a given address.
+     *
+     * @param $address
+     * @param $expected
+     */
+    public function seeAttachmentsCountInLastEmailTo($address, $expected)
+    {
+        $this->assertEquals($expected, $this->getNumberOfAttachments($this->provider->lastMessageTo($address)));
     }
 
     /**

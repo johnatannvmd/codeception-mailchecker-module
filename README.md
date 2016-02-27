@@ -132,8 +132,8 @@ Example:
 
 ### dontSeeInLastEmail
 
-Checks that an email does NOT contain a value. It searches the full raw text of the
-email: headers, subject line, and body.
+Checks that an email does NOT contain a value. It searches the full raw
+text of the email: headers, subject line, and body.
 
 Example:
 
@@ -145,8 +145,8 @@ Example:
 
 ### dontSeeInLastEmailTo
 
-Checks that the last email sent to an address does NOT contain a value. It searches the
-full raw text of the email: headers, subject line, and body.
+Checks that the last email sent to an address does NOT contain a value.
+It searches the full raw text of the email: headers, subject line, and body.
 
 Example:
 
@@ -183,7 +183,8 @@ Example:
 
 ### seeAttachmentFilenameInLastEmailTo
 
-Checks that the last sent to an address have attachment with following filename.
+Checks that the last sent to an address have attachment with following
+filename.
 
 Example:
 
@@ -196,7 +197,8 @@ Example:
 
 ### dontSeeAttachmentFilenameInLastEmailTo
 
-Checks that the last sent to an address does NOT have attachment with following filename.
+Checks that the last sent to an address does NOT have attachment with
+following filename.
 
 Example:
 
@@ -206,6 +208,32 @@ Example:
 
 * Param $address
 * Param $unexpectedFilename
+
+### seeAttachmentsCountInLastEmail
+
+Asserts that a certain number of attachments found in the last email.
+
+Example:
+
+    <?php
+    $I->seeAttachmentsCountInLastEmail(1);
+    ?>
+
+* Param $exected
+
+### seeAttachmentsCountInLastEmailTo
+
+Asserts that a certain number of attachments found in the last email to a
+given address.
+
+Example:
+
+    <?php
+    $I->seeAttachmentsCountInLastEmailTo('admin@example.com', 1);
+    ?>
+
+* Param $address
+* Param $expected
 
 ### grabMatchesFromLastEmail
 

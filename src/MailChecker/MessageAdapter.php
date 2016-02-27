@@ -59,14 +59,36 @@ trait MessageAdapter
         $this->assertNotContains($unexpected, $email->getBody()[0]->getBody(), "Email Does Not Contain");
     }
 
+    /**
+     * Look for filename in a attachments of a given message
+     *
+     * @param \MailChecker\Models\Message $email
+     * @param $expectedFilename
+     */
     protected function seeInEmailAttachment(Message $email, $expectedFilename)
     {
         $this->assertContains($expectedFilename, $email->getAttachmentsFilesNames(), 'Email Contains Attachment');
     }
 
+    /**
+     * Look for the absence of a filename in a attachments of a given message
+     *
+     * @param \MailChecker\Models\Message $email
+     * @param $unexpectedFilename
+     */
     protected function dontSeeInEmailAttachment(Message $email, $unexpectedFilename)
     {
         $this->assertNotContains($unexpectedFilename, $email->getAttachmentsFilesNames(), 'Email Does Not Contains Attachment');
+    }
+
+    /**
+     * @param \MailChecker\Models\Message $email
+     *
+     * @return int
+     */
+    protected function getNumberOfAttachments(Message $email)
+    {
+        return count($email->getAttachments());
     }
 
     /**
