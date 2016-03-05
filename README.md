@@ -16,6 +16,8 @@ It supports several mail providers:
 * [ZendMail](https://github.com/zendframework/zend-mail)
 * [LatherMail](https://github.com/reclosedev/lathermail)
 * [Mailtrap](https://mailtrap.io)
+* [MailHog](https://github.com/mailhog/MailHog)
+* [Imap Server](https://github.com/johnatannvmd/codeception-mailchecker-imap-provider)
 
 ## Installation
 
@@ -25,8 +27,7 @@ for MailDump provider:
     {
         "require-dev": {
             "codeception/codeception": "*",
-            "johnatannvmd/mailchecker-codeception-module": "1.*",
-            "guzzle/guzzle": "3.*"
+            "johnatannvmd/mailchecker-codeception-module": "1.*"
         }
     } 
 
@@ -132,8 +133,8 @@ Example:
 
 ### dontSeeInLastEmail
 
-Checks that an email does NOT contain a value. It searches the full raw text of the
-email: headers, subject line, and body.
+Checks that an email does NOT contain a value. It searches the full raw
+text of the email: headers, subject line, and body.
 
 Example:
 
@@ -145,8 +146,8 @@ Example:
 
 ### dontSeeInLastEmailTo
 
-Checks that the last email sent to an address does NOT contain a value. It searches the
-full raw text of the email: headers, subject line, and body.
+Checks that the last email sent to an address does NOT contain a value.
+It searches the full raw text of the email: headers, subject line, and body.
 
 Example:
 
@@ -156,6 +157,110 @@ Example:
 
 * Param $email
 * Param $text
+
+### seeAttachmentFilenameInLastEmail
+
+Checks that the last email have attachment with following filename.
+
+Example:
+
+    <?php
+    $I->seeAttachmentFilenameInLastEmail('expected_journey.ext');
+    ?>
+
+* Param $expectedFilename
+
+### dontSeeAttachmentFilenameInLastEmail)
+
+Checks that the last email does NOT have attachment with following filename.
+
+Example:
+
+    <?php
+    $I->dontSeeAttachmentFilenameInLastEmail('unexpected_journey.ext');
+    ?>
+
+* Param $unexpectedFilename
+
+### seeAttachmentFilenameInLastEmailTo
+
+Checks that the last sent to an address have attachment with following
+filename.
+
+Example:
+
+    <?php
+    $I->seeAttachmentFilenameInLastEmailTo('admin@example.com', 'expected_journey.ext');
+    ?>
+
+* Param $address
+* Param $expectedFilename
+
+### dontSeeAttachmentFilenameInLastEmailTo
+
+Checks that the last sent to an address does NOT have attachment with
+following filename.
+
+Example:
+
+    <?php
+    $I->dontSeeAttachmentFilenameInLastEmailTo('admin@example.com', 'unexpected_journey.ext');
+    ?>
+
+* Param $address
+* Param $unexpectedFilename
+
+### seeAttachmentsCountInLastEmail
+
+Asserts that a certain number of attachments found in the last email.
+
+Example:
+
+    <?php
+    $I->seeAttachmentsCountInLastEmail(1);
+    ?>
+
+* Param $expected
+
+### seeAttachmentsCountInLastEmailTo
+
+Asserts that a certain number of attachments found in the last email to a
+given address.
+
+Example:
+
+    <?php
+    $I->seeAttachmentsCountInLastEmailTo('admin@example.com', 1);
+    ?>
+
+* Param $address
+* Param $expected
+
+### seeCcInLastEmail
+
+Checks that the last email sent has expected address in CC field
+
+Example:
+
+    <?php
+    $I->seeCcInLastEmail('cc@example.com');
+    ?>
+
+* Param $expected
+
+### seeCcInLastEmailTo
+
+Checks that the last email sent to and address has expected address in
+CC field
+
+Example:
+
+    <?php
+    $I->seeCcInLastEmailTo('admin@example.com', 'cc@example.com');
+    ?>
+
+* Param $address
+* Param $expected
 
 ### grabMatchesFromLastEmail
 

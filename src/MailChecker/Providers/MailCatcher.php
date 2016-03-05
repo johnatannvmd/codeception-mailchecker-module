@@ -2,6 +2,7 @@
 namespace MailChecker\Providers;
 
 use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
+use MailChecker\Providers\BaseProviders\RawMailProvider;
 
 /**
  * Class MailCatcher
@@ -19,6 +20,7 @@ use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 class MailCatcher implements IProvider
 {
     use GuzzleBasedProvider;
+    use RawMailProvider;
 
     /**
      * @inheritdoc
@@ -31,27 +33,21 @@ class MailCatcher implements IProvider
     /**
      * @inheritdoc
      */
-    public function lastMessageFrom($address)
+    public function lastMessageTo($address)
     {
-        $ids = [];
-        $messages = $this->messages();
-        if (empty($messages)) {
-            return [];
+        $lastMessage = null;
+        $messages = $this->getMessages();
+        if (is_null($messages)) {
+            return null;
         }
 
         foreach ($messages as $message) {
-            foreach ($message['recipients'] as $recipient) {
-                if (strpos($recipient, $address) !== false) {
-                    $ids[] = $message['id'];
-                }
+            if ($message->containsTo($address)) {
+                $lastMessage = $message;
             }
         }
 
-        if (count($ids) > 0) {
-            return $this->emailFromId(max($ids));
-        }
-
-        return [];
+        return $lastMessage;
     }
 
     /**
@@ -59,40 +55,38 @@ class MailCatcher implements IProvider
      */
     public function lastMessage()
     {
-        $messages = $this->messages();
-        if (empty($messages)) {
-            return [];
+        $messages = $this->getMessages();
+
+        if (is_null($messages)) {
+            return null;
         }
 
-        $last = array_shift($messages);
-
-        return $this->emailFromId($last['id']);
+        return array_pop($messages);
     }
 
     /**
      * @inheritdoc
      */
-    public function messages()
+    public function messagesCount()
     {
-        $response = $this->transport->get('/messages');
-        $messages = json_decode($response->getBody()->getContents(), true);
+        $messages = json_decode($this->transport->get('/messages')->getBody()->getContents(), true);
 
-        usort($messages, ['\\MailChecker\\Util', 'messageSortByCreatedAt']);
-
-        return $messages;
+        return count($messages);
     }
 
     /**
-     * @param string $id
-     *
-     * @return array
+     * @return \MailChecker\Models\Message[]|null
      */
-    private function emailFromId($id)
+    private function getMessages()
     {
-        $response = $this->transport->get("/messages/{$id}.json");
-        $message = json_decode($response->getBody()->getContents(), true);
-        $message['source'] = quoted_printable_decode($message['source']);
+        $response = json_decode($this->transport->get('/messages')->getBody()->getContents(), true);
 
-        return $message;
+        if (!empty($response)) {
+            return array_map(function ($rawMessage) {
+                return $this->getMessage($this->transport->get("/messages/{$rawMessage['id']}.source")->getBody()->getContents());
+            }, $response);
+        }
+
+        return null;
     }
 }

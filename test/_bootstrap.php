@@ -1,22 +1,14 @@
 <?php
-if(getenv('MAIL_SERVICE_HOST') === false) {
-    throw new Exception('Environment variable MAIL_SERVICE_HOST was not set.');
-}
-
-if(getenv('MAIL_TRAP_USER') === false) {
-    throw new Exception('Environment variable MAIL_TRAP_USER was not set.');
-}
-
-if(getenv('MAIL_TRAP_PASSWORD') === false) {
-    throw new Exception('Environment variable MAIL_TRAP_PASSWORD was not set.');
-}
-
-if(getenv('MAIL_TRAP_APITOKEN') === false) {
-    throw new Exception('Environment variable MAIL_TRAP_APITOKEN was not set.');
-}
-
-require_once 'acceptance/BaseMailChecker.php';
-require_once '_support/BaseMailerHelper.php';
+array_map(
+    function($item) {
+        if(getenv($item) === false) {
+            throw new Exception("Environment variable {$item} was not set.");
+        }
+    },
+    [
+        'MAIL_SERVICE_HOST', 'MAIL_TRAP_USER', 'MAIL_TRAP_PASSWORD', 'MAIL_TRAP_APITOKEN'
+    ]
+);
 
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers'] = [];
 
@@ -47,6 +39,15 @@ require_once '_support/BaseMailerHelper.php';
     'smtpPort' => '1027'
 ];
 
+\Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['MailHog'] = [
+    'options' => [
+        'url' => getenv('MAIL_SERVICE_HOST'),
+        'port' => '1083'
+    ],
+    'smtpHost' => '127.0.0.1',
+    'smtpPort' => '1028'
+];
+
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['MailTrap'] = [
     'options' => [
         'url' => 'https://mailtrap.io',
@@ -61,7 +62,7 @@ require_once '_support/BaseMailerHelper.php';
 
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['ZendMail'] = [
     'options' => [
-        'path' => 'tests/_output',
+        'path' => 'test/_output',
         'extension' => 'eml'
     ]
 ];

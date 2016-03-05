@@ -6,14 +6,6 @@ use MailChecker\Providers\IProvider;
 
 class MailProviderFactory
 {
-    private static $providers = [
-        'MailCatcher' => '\\MailChecker\\Providers\\MailCatcher',
-        'MailDump' => '\\MailChecker\\Providers\\MailDump',
-        'ZendMail' => '\\MailChecker\\Providers\\ZendMail',
-        'LatherMail' => '\\MailChecker\\Providers\\LatherMail',
-        'MailTrap' => '\\MailChecker\\Providers\\MailTrap'
-    ];
-
     /**
      * @param $providerName string one of the self::$providers or FDQN to class which
      *                                 extends \MailChecker\Providers\IProvider
@@ -25,8 +17,9 @@ class MailProviderFactory
      */
     public static function getProvider($providerName, $config)
     {
-        if (isset(self::$providers[$providerName])) {
-            return new self::$providers[$providerName]($config);
+        $providerClass = '\\MailChecker\\Providers\\' . $providerName;
+        if (class_exists('\\MailChecker\\Providers\\' . $providerName)) {
+            return new $providerClass($config);
         }
 
         if (!class_exists($providerName)) {

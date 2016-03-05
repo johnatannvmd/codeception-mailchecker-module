@@ -1,31 +1,36 @@
 language: php
+
 php:
   - 5.6
   - 5.5
+
 before_install:
-  - echo 'date.timezone = "Etc/GMT"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - if [[ "$TRAVIS_PHP_VERSION" = "5.5" ]]; then pecl install mailparse-2.1.6 ; fi
+  - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then pecl install mailparse-2.1.6 ; fi
+  - phpenv config-add travis-php-config.ini
+  - composer self-update
+  - composer install --prefer-source
   - gem install mailcatcher
   - mailcatcher --http-ip 127.0.0.1 --http-port 1081 --smtp-ip 127.0.0.1 --smtp-port 1026
   - pip install --user maildump
   - maildump --http-ip 127.0.0.1 --http-port 1080 --smtp-ip 127.0.0.1 --smtp-port 1025 --pidfile ~/maildump.pid
   - pip install --user lathermail
   - lathermail --api-host 127.0.0.1 --api-port 1082 --smtp-host 127.0.0.1 --smtp-port 1027 </dev/null &>/dev/null &
-  - cd test
-  - composer self-update
-  - composer install --prefer-source
+  - GOPATH=~/go go get -v github.com/mailhog/MailHog
+  - ~/go/bin/MailHog -hostname 127.0.0.1 -api-bind-addr 0.0.0.0:1083 -ui-bind-addr 0.0.0.0:1083 -smtp-bind-addr 0.0.0.0:1028 -storage memory </dev/null &>/dev/null &
   - php vendor/bin/codecept build
 
 script:
   - php vendor/bin/codecept run -d --coverage-xml acceptance.xml
 
 after_success:
-  - LEVEL_UP=`pwd`/.. && php vendor/bin/coveralls -v --exclude-no-stmt -c test/.coveralls.yml -r `readlink -f $LEVEL_UP`
+  - php vendor/bin/coveralls -v --exclude-no-stmt -c .coveralls.yml
 
 sudo: false
 
 cache:
   directories:
-    - $HOME/.composer/cache
+    - $HOME/.cache/composer/
     - $HOME/.cache/pip
     - $HOME/.local/lib
     - $HOME/.local/include

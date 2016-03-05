@@ -4,11 +4,14 @@ namespace Codeception\Module;
 
 use Codeception\Module;
 use MailChecker\MailProviderFactory;
+use MailChecker\MessageAdapter;
 
 class MailChecker extends Module
 {
+    use MessageAdapter;
+
     /**
-     * @var \MailChecker\Provider\IProvider
+     * @var \MailChecker\Providers\IProvider
      */
     protected $provider;
 
@@ -56,30 +59,10 @@ class MailChecker extends Module
      */
     public function seeInLastEmail($expected)
     {
-        $email = $this->provider->lastMessage();
-        $this->seeInEmail($email, $expected);
-    }
-
-    /**
-     * Look for a string in the most recent email subject
-     *
-     * @param $expected
-     */
-    public function seeInLastEmailSubject($expected)
-    {
-        $email = $this->provider->lastMessage();
-        $this->seeInEmailSubject($email, $expected);
-    }
-
-    /**
-     * Look for the absence of a string in the most recent email subject
-     *
-     * @param $expected
-     */
-    public function dontSeeInLastEmailSubject($expected)
-    {
-        $email = $this->provider->lastMessage();
-        $this->dontSeeInEmailSubject($email, $expected);
+        $this->seeInEmail(
+            $this->provider->lastMessage(),
+            $expected
+        );
     }
 
     /**
@@ -89,8 +72,36 @@ class MailChecker extends Module
      */
     public function dontSeeInLastEmail($unexpected)
     {
-        $email = $this->provider->lastMessage();
-        $this->dontSeeInEmail($email, $unexpected);
+        $this->dontSeeInEmail(
+            $this->provider->lastMessage(),
+            $unexpected
+        );
+    }
+
+    /**
+     * Look for a string in the most recent email subject
+     *
+     * @param $expected
+     */
+    public function seeInLastEmailSubject($expected)
+    {
+        $this->seeInEmailSubject(
+            $this->provider->lastMessage(),
+            $expected
+        );
+    }
+
+    /**
+     * Look for the absence of a string in the most recent email subject
+     *
+     * @param $expected
+     */
+    public function dontSeeInLastEmailSubject($expected)
+    {
+        $this->dontSeeInEmailSubject(
+            $this->provider->lastMessage(),
+            $expected
+        );
     }
 
     /**
@@ -101,8 +112,10 @@ class MailChecker extends Module
      */
     public function seeInLastEmailTo($address, $expected)
     {
-        $email = $this->provider->lastMessageFrom($address);
-        $this->seeInEmail($email, $expected);
+        $this->seeInEmail(
+            $this->provider->lastMessageTo($address),
+            $expected
+        );
     }
 
     /**
@@ -113,8 +126,10 @@ class MailChecker extends Module
      */
     public function dontSeeInLastEmailTo($address, $unexpected)
     {
-        $email = $this->provider->lastMessageFrom($address);
-        $this->dontSeeInEmail($email, $unexpected);
+        $this->dontSeeInEmail(
+            $this->provider->lastMessageTo($address),
+            $unexpected
+        );
     }
 
     /**
@@ -125,8 +140,10 @@ class MailChecker extends Module
      */
     public function seeInLastEmailSubjectTo($address, $expected)
     {
-        $email = $this->provider->lastMessageFrom($address);
-        $this->seeInEmailSubject($email, $expected);
+        $this->seeInEmailSubject(
+            $this->provider->lastMessageTo($address),
+            $expected
+        );
     }
 
     /**
@@ -137,8 +154,106 @@ class MailChecker extends Module
      */
     public function dontSeeInLastEmailSubjectTo($address, $unexpected)
     {
-        $email = $this->provider->lastMessageFrom($address);
-        $this->dontSeeInEmailSubject($email, $unexpected);
+        $this->dontSeeInEmailSubject(
+            $this->provider->lastMessageTo($address),
+            $unexpected
+        );
+    }
+
+    /**
+     * Checks that the last email have attachment with following filename.
+     *
+     * @param $expectedFilename
+     */
+    public function seeAttachmentFilenameInLastEmail($expectedFilename)
+    {
+        $this->seeInEmailAttachment(
+            $this->provider->lastMessage(),
+            $expectedFilename
+        );
+    }
+
+    /**
+     * Checks that the last email does NOT have attachment with following filename.
+     *
+     * @param $unexpectedFilename
+     */
+    public function dontSeeAttachmentFilenameInLastEmail($unexpectedFilename)
+    {
+        $this->dontSeeInEmailAttachment(
+            $this->provider->lastMessage(),
+            $unexpectedFilename
+        );
+    }
+
+    /**
+     * Checks that the last sent to an address have attachment with following filename.
+     *
+     * @param $address
+     * @param $expectedFilename
+     */
+    public function seeAttachmentFilenameInLastEmailTo($address, $expectedFilename)
+    {
+        $this->seeInEmailAttachment(
+            $this->provider->lastMessageTo($address),
+            $expectedFilename
+        );
+    }
+
+    /**
+     * Checks that the last sent to an address does NOT have attachment with following filename.
+     *
+     * @param $address
+     * @param $unexpectedFilename
+     */
+    public function dontSeeAttachmentFilenameInLastEmailTo($address, $unexpectedFilename)
+    {
+        $this->dontSeeInEmailAttachment(
+            $this->provider->lastMessageTo($address),
+            $unexpectedFilename
+        );
+    }
+
+    /**
+     * Asserts that a certain number of attachments found in the last email.
+     *
+     * @param $expected
+     */
+    public function seeAttachmentsCountInLastEmail($expected)
+    {
+        $this->assertEquals($expected, $this->getNumberOfAttachments($this->provider->lastMessage()));
+    }
+
+    /**
+     * Asserts that a certain number of attachments found in the last email to a given address.
+     *
+     * @param $address
+     * @param $expected
+     */
+    public function seeAttachmentsCountInLastEmailTo($address, $expected)
+    {
+        $this->assertEquals($expected, $this->getNumberOfAttachments($this->provider->lastMessageTo($address)));
+    }
+
+    /**
+     * Checks that last email has expected address in CC field
+     *
+     * @param $expected
+     */
+    public function seeCcInLastEmail($expected)
+    {
+        $this->seeCcInEmail($this->provider->lastMessage() , $expected);
+    }
+
+    /**
+     * Checks that last email to has expected address in CC field
+     *
+     * @param $address
+     * @param $expected
+     */
+    public function seeCcInLastEmailTo($address, $expected)
+    {
+        $this->seeCcInEmail($this->provider->lastMessageTo($address) , $expected);
     }
 
     /**
@@ -150,10 +265,10 @@ class MailChecker extends Module
      */
     public function grabMatchesFromLastEmail($regex)
     {
-        $email = $this->provider->lastMessage();
-        $matches = $this->grabMatchesFromEmail($email, $regex);
-
-        return $matches;
+        return $this->grabMatchesFromEmail(
+            $this->provider->lastMessage(),
+            $regex
+        );
     }
 
     /**
@@ -165,9 +280,7 @@ class MailChecker extends Module
      */
     public function grabFromLastEmail($regex)
     {
-        $matches = $this->grabMatchesFromLastEmail($regex);
-
-        return $matches[0];
+        return $this->grabMatchesFromLastEmail($regex)[0];
     }
 
     /**
@@ -181,10 +294,10 @@ class MailChecker extends Module
      */
     public function grabMatchesFromLastEmailTo($address, $regex)
     {
-        $email = $this->provider->lastMessageFrom($address);
-        $matches = $this->grabMatchesFromEmail($email, $regex);
-
-        return $matches;
+        return $this->grabMatchesFromEmail(
+            $this->provider->lastMessageTo($address),
+            $regex
+        );
     }
 
     /**
@@ -198,9 +311,7 @@ class MailChecker extends Module
      */
     public function grabFromLastEmailTo($address, $regex)
     {
-        $matches = $this->grabMatchesFromLastEmailTo($address, $regex);
-
-        return $matches[0];
+        return $this->grabMatchesFromLastEmailTo($address, $regex)[0];
     }
 
     /**
@@ -210,70 +321,6 @@ class MailChecker extends Module
      */
     public function seeEmailCount($expected)
     {
-        $messages = $this->provider->messages();
-        $count = count($messages);
-        $this->assertEquals($expected, $count);
-    }
-
-    /**
-     * Look for a string in an email subject
-     *
-     * @param $email
-     * @param $expected
-     */
-    protected function seeInEmailSubject($email, $expected)
-    {
-        $this->assertContains($expected, $email['subject'], "Email Subject Contains");
-    }
-
-    /**
-     * Look for the absence of a string in an email subject
-     *
-     * @param $email
-     * @param $unexpected
-     */
-    protected function dontSeeInEmailSubject($email, $unexpected)
-    {
-        $this->assertNotContains($unexpected, $email['subject'], "Email Subject Does Not Contain");
-    }
-
-    /**
-     * Look for a string in an email
-     *
-     * @param $email
-     * @param $expected
-     */
-    protected function seeInEmail($email, $expected)
-    {
-        $this->assertContains($expected, $email['source'], "Email Contains");
-    }
-
-    /**
-     * Look for the absence of a string in an email
-     *
-     * @param $email
-     * @param $unexpected
-     */
-    protected function dontSeeInEmail($email, $unexpected)
-    {
-        $this->assertNotContains($unexpected, $email['source'], "Email Does Not Contain");
-    }
-
-    /**
-     * Return the matches of a regex against the raw email
-     *
-     * @param $email
-     * @param $regex
-     *
-     * @return array
-     */
-    protected function grabMatchesFromEmail($email, $regex)
-    {
-        $matches = [];
-
-        preg_match($regex, $email['source'], $matches);
-        $this->assertNotEmpty($matches, "No matches found for $regex");
-
-        return $matches;
+        $this->assertEquals($expected, $this->provider->messagesCount());
     }
 }

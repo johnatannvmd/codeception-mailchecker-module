@@ -1,7 +1,9 @@
 <?php
 namespace MailChecker\Providers;
 
+use MailChecker\Exceptions\MailProviderException;
 use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
+use MailChecker\Providers\BaseProviders\RawMailProvider;
 
 /**
  * Class MailTrap
@@ -21,13 +23,14 @@ use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 class MailTrap implements IProvider
 {
     /**
-     * @var string
+     * @var array
      */
-    private $inboxId;
+    private $defaultInbox;
 
     use GuzzleBasedProvider {
         __construct as baseConstruct;
     }
+    use RawMailProvider;
 
     public function __construct(array $config)
     {
@@ -36,103 +39,101 @@ class MailTrap implements IProvider
         ];
 
         $this->baseConstruct($config);
+
+        $this->defaultInbox = $this->getDefaultInbox();
     }
 
     /**
-     * Clears messages in provider
-     *
-     * @return void
+     * @inheritdoc
      */
     public function clear()
     {
-        $this->transport->patch('/api/v1/inboxes/' . $this->getInboxId() . '/clean');
+        $this->transport->patch('/api/v1/inboxes/' . $this->defaultInbox['id'] . '/clean');
     }
 
     /**
-     * Get last message from provider by given email address
-     *
-     * @param $address
-     *
-     * @return array
+     * @inheritdoc
      */
-    public function lastMessageFrom($address)
+    public function messagesCount()
     {
-        $ids = [];
-        $messages = $this->messages();
-        if (empty($messages)) {
-            return [];
+        $inboxInfo = json_decode($this->transport->get("/api/v1/inboxes/{$this->defaultInbox['id']}")->getBody(), true);
+
+        if ($inboxInfo == false) {
+            throw new MailProviderException('Can not decode answer from MailTrap. ');
         }
 
-        foreach ($messages as $message) {
-            if (strpos($message['to_email'], $address) !== false) {
-                $ids[] = $message['id'];
-            }
-        }
-
-        if (count($ids) > 0) {
-            return $this->emailFromId(max($ids));
-        }
-
-        return [];
+        return $inboxInfo['emails_count'];
     }
 
     /**
-     * Get last message from provider
-     *
-     * @return array
+     * @inheritdoc
      */
-    public function lastMessage()
+    public function lastMessageTo($address)
     {
-        $messages = $this->messages();
-
-        $last = array_shift($messages);
-
-        return $this->emailFromId($last['id']);
-    }
-
-    /**
-     * Get all messages from provider
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        $messages = json_decode(
-            $this->transport->get("/api/v1/inboxes/{$this->getInboxId()}/messages")->getBody()->getContents(),
-            true
-        );
-
-        usort($messages, ['\\MailChecker\\Util', 'messageSortByCreatedAt']);
+        $messages = $this->getLastMessage(['search' => $address]);
+        if (is_null($messages)) {
+            return null;
+        }
 
         return $messages;
     }
 
-    private function getInboxId()
+    /**
+     * @inheritdoc
+     */
+    public function lastMessage()
     {
-        if ($this->inboxId !== null) {
-            return $this->inboxId;
+        $messages = $this->getLastMessage();
+        if (is_null($messages)) {
+            return null;
         }
 
-        $inboxes = json_decode($this->transport->get('/api/v1/inboxes')->getBody()->getContents(), true);
+        return $messages;
+    }
+
+    /**
+     * @param null $search
+     *
+     * @return \MailChecker\Models\Message[]|null
+     */
+    private function getLastMessage($search = null)
+    {
+        $options = [];
+
+        if (!is_null($search)) {
+            $options['query'] = $search;
+        }
+
+        $response = json_decode(
+            $this->transport->get("/api/v1/inboxes/{$this->defaultInbox['id']}/messages", $options)->getBody(),
+            true
+        );
+
+        if (!empty($response)) {
+            return $this->getMessage($this->transport->get($response[0]['raw_path'])->getBody());
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string
+     *
+     * @throws \MailChecker\Exceptions\MailProviderException
+     */
+    private function getDefaultInbox()
+    {
+        $inboxes = json_decode($this->transport->get('/api/v1/inboxes')->getBody(), true);
         if ($inboxes === false) {
-            throw new \Exception('Can not decode answer from MailTrap');
+            throw new MailProviderException('Can not decode answer from MailTrap. ');
         }
 
         foreach ($inboxes as $inbox) {
             if ($inbox['name'] === $this->config['options']['defaultInbox']) {
-                return $this->inboxId = $inbox['id'];
+                return $inbox;
             }
         }
 
-        throw new \Exception("Inbox with name: \"{$this->config['options']['defaultInbox']}\" does not found");
-    }
-
-    private function emailFromId($id)
-    {
-        $response = $this->transport->get("/api/v1/inboxes/{$this->getInboxId()}/messages/{$id}");
-        $message = json_decode($response->getBody()->getContents(), true);
-        $message['source'] = $this->transport->get($message['raw_path'])->getBody()->getContents();
-
-        return $message;
+        throw new MailProviderException("Inbox with name: '{$this->config['options']['defaultInbox']}' not found");
     }
 }

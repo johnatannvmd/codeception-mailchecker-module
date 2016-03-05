@@ -1,13 +1,13 @@
 <?php
-class MailCatcherCest
+class MailDumpCest
 {
-    use BaseMailChecker {
+    use \MailChecker\TestKit\BaseMailChecker {
         _before as _baseBefore;
     }
 
     protected function getProvider()
     {
-        return 'MailCatcher';
+        return 'MailDump';
     }
 
     public function _before(\Codeception\Module\SmtpMailerHelper $mailer)

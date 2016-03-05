@@ -6,7 +6,7 @@ use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 use MailChecker\Providers\BaseProviders\RawMailProvider;
 
 /**
- * Class MailDump
+ * Class MailHog
  *
  * Config example:
  * ```
@@ -18,7 +18,7 @@ use MailChecker\Providers\BaseProviders\RawMailProvider;
  *
  * @package MailChecker\Providers
  */
-class MailDump implements IProvider
+class MailHog implements IProvider
 {
     use GuzzleBasedProvider;
     use RawMailProvider;
@@ -28,7 +28,7 @@ class MailDump implements IProvider
      */
     public function clear()
     {
-        $this->transport->delete('/messages/');
+        $this->transport->delete('/api/v1/messages');
     }
 
     /**
@@ -36,9 +36,9 @@ class MailDump implements IProvider
      */
     public function messagesCount()
     {
-        $messages = json_decode($this->transport->get('/messages/')->getBody(), true);
+        $messages = json_decode($this->transport->get('/api/v2/messages')->getBody(), true);
 
-        return count($messages['messages']);
+        return (int)$messages['total'];
     }
 
     /**
@@ -46,7 +46,6 @@ class MailDump implements IProvider
      */
     public function lastMessageTo($address)
     {
-        $lastMessage = null;
         $messages = $this->getMessages();
         if (is_null($messages)) {
             return null;
@@ -54,11 +53,11 @@ class MailDump implements IProvider
 
         foreach ($messages as $message) {
             if ($message->containsTo($address)) {
-                $lastMessage = $message;
+                return $message;
             }
         }
 
-        return $lastMessage;
+        return null;
     }
 
     /**
@@ -72,7 +71,7 @@ class MailDump implements IProvider
             return null;
         }
 
-        return array_pop($messages);
+        return $messages[0];
     }
 
     /**
@@ -80,12 +79,12 @@ class MailDump implements IProvider
      */
     private function getMessages()
     {
-        $response = json_decode($this->transport->get('/messages/')->getBody(), true);
+        $response = json_decode($this->transport->get('/api/v2/messages')->getBody(), true);
 
-        if (isset($response['messages']) && !empty($response['messages'])) {
+        if (isset($response['items']) && !empty($response['items'])) {
             return array_map(function ($rawMessage) {
-                return $this->getMessage($this->transport->get("/messages/{$rawMessage['id']}.source")->getBody());
-            }, $response['messages']);
+                return $this->getMessage($rawMessage['Raw']['Data']);
+            }, $response['items']);
         }
 
         return null;

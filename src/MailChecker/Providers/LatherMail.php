@@ -2,6 +2,7 @@
 namespace MailChecker\Providers;
 
 use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
+use MailChecker\Providers\BaseProviders\RawMailProvider;
 
 /**
  * X-Mail-Password - same as SMTP password
@@ -22,67 +23,71 @@ use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 class LatherMail implements IProvider
 {
     use GuzzleBasedProvider;
+    use RawMailProvider;
 
+    /**
+     * @inheritdoc
+     */
     public function clear()
     {
         $this->transport->delete('/api/0/messages/');
     }
 
-    public function lastMessageFrom($address)
+    /**
+     * @inheritdoc
+     */
+    public function lastMessageTo($address)
     {
-        $ids = [];
-        $messages = $this->messages();
-        if (empty($messages)) {
-            return [];
-        }
-
-        foreach ($messages as $message) {
-            foreach ($message['recipients'] as $recipient) {
-                if (strpos($recipient['address'], $address) !== false) {
-                    $ids[] = $message['_id'];
-                }
-            }
-        }
-
-        if (count($ids) > 0) {
-            return $this->emailFromId(max($ids));
-        }
-
-        return [];
-    }
-
-    public function lastMessage()
-    {
-        $messages = $this->messages();
-        if (empty($messages)) {
-            return [];
-        }
-
-        $last = array_shift($messages);
-
-        return $this->emailFromId($last['_id']);
-    }
-
-    public function messages()
-    {
-        $response = json_decode($this->transport->get('/api/0/messages/')->getBody()->getContents(), true);
-
-        if (isset($response['message_list'])) {
-            $messages = $response['message_list'];
-        } else {
-            return [];
+        $messages = $this->getLastMessage(['recipients.address' => $address]);
+        if (is_null($messages)) {
+            return null;
         }
 
         return $messages;
     }
 
-    private function emailFromId($id)
+    /**
+     * @inheritdoc
+     */
+    public function lastMessage()
     {
-        $response = json_decode($this->transport->get("/api/0/messages/{$id}")->getBody()->getContents(), true);
+        $messages = $this->getLastMessage();
+        if (is_null($messages)) {
+            return null;
+        }
 
-        $message = $response['message_info'];
-        $message['source'] = $message['message_raw'];
+        return $messages;
+    }
 
-        return $message;
+    /**
+     * @inheritdoc
+     */
+    public function messagesCount()
+    {
+        $response = json_decode($this->transport->get('/api/0/messages/')->getBody(), true);
+
+        return $response['message_count'];
+    }
+
+    /**
+     * @param array $query
+     *
+     * @return \MailChecker\Models\Message[]
+     */
+    private function getLastMessage(array $query = [])
+    {
+        $options = [];
+
+        if (!empty($query)) {
+            $options['query'] = $query;
+        }
+
+        $response = json_decode($this->transport->get('/api/0/messages/', $options)->getBody(), true);
+
+        if (isset($response['message_list'])) {
+            return $this->getMessage($response['message_list'][0]['message_raw']);
+        }
+
+        return null;
     }
 }
