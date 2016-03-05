@@ -4,6 +4,11 @@ namespace MailChecker\Models;
 class Message
 {
     /**
+     * @var \DateTime
+     */
+    private $date;
+
+    /**
      * @var string
      */
     private $subject;
@@ -33,6 +38,22 @@ class Message
      */
     private $attachments = [];
 
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
 
     /**
      * @return string

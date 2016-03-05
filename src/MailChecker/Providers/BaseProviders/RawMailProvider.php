@@ -21,6 +21,7 @@ trait RawMailProvider
         $headers = array_change_key_case($parser->getHeaders());
 
         $message = new Message();
+        $message->setDate(new \DateTime($headers['date']));
         $message->setSubject($headers['subject']);
         $message->setFrom($headers['from']);
 
