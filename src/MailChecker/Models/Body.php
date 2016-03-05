@@ -91,9 +91,9 @@ class Body
 
     private function decodeContentTransfer($input)
     {
-        if ($this->encoding == 'base64') {
+        if ($this->getEncoding()== 'base64') {
             return base64_decode($input);
-        } elseif ($this->encoding == 'quoted-printable') {
+        } elseif ($this->getEncoding() == 'quoted-printable') {
             return quoted_printable_decode($input);
         }
 
@@ -107,6 +107,6 @@ class Body
         }
 
         $charset = new Charset();
-        return $charset->decodeCharset($input, $this->charset);
+        return $charset->decodeCharset($input, $this->getCharset());
     }
 }

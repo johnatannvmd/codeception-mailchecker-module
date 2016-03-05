@@ -1,5 +1,5 @@
 <?php
-class MailDumpCest
+class MailHogCest
 {
     use \MailChecker\TestKit\BaseMailChecker {
         _before as _baseBefore;

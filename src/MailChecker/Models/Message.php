@@ -4,11 +4,6 @@ namespace MailChecker\Models;
 class Message
 {
     /**
-     * @var \DateTime
-     */
-    private $date;
-
-    /**
      * @var string
      */
     private $subject;
@@ -40,22 +35,6 @@ class Message
 
 
     /**
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param \DateTime $date
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-    }
-
-    /**
      * @return string
      */
     public function getSubject()
@@ -77,14 +56,6 @@ class Message
     public function getBody()
     {
         return $this->body;
-    }
-
-    /**
-     * @param Body $body
-     */
-    public function setBody(Body $body)
-    {
-        $this->body = [$body];
     }
 
     public function addBody(Body $body)
@@ -188,14 +159,6 @@ class Message
         foreach ($this->getAttachments() as $attachment) {
             yield $attachment->getFilename();
         }
-    }
-
-    /**
-     * @param \MailChecker\Models\Attachment[] $attachments
-     */
-    public function setAttachments(array $attachments)
-    {
-        $this->attachments = $attachments;
     }
 
     /**

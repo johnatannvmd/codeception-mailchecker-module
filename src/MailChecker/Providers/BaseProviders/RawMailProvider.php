@@ -21,21 +21,23 @@ trait RawMailProvider
         $headers = array_change_key_case($parser->getHeaders());
 
         $message = new Message();
-        $message->setDate(new \DateTime($headers['date']));
         $message->setSubject($headers['subject']);
         $message->setFrom($headers['from']);
+
+        if (strpos($headers['to'], ', ') !== false) {
+            $headers['to'] = explode(', ', $headers['to']);
+        }
         if (is_array($headers['to'])) {
-            foreach ($headers['to'] as $to) {
-                $message->addTo($to);
-            }
+            $message->setTo($headers['to']);
         } else {
             $message->addTo($headers['to']);
         }
 
+        if (strpos($headers['cc'], ', ') !== false) {
+            $headers['cc'] = explode(', ', $headers['cc']);
+        }
         if (is_array($headers['cc'])) {
-            foreach ($headers['cc'] as $cc) {
-                $message->addCc($cc);
-            }
+            $message->setCc($headers['cc']);
         } else {
             $message->addCc($headers['cc']);
         }
@@ -57,7 +59,6 @@ trait RawMailProvider
         /** @var \PhpMimeMailParser\Attachment $messageAttachment */
         foreach ($parser->getAttachments() as $messageAttachment) {
             $attachment = new Attachment();
-            $attachment->setType($messageAttachment->getContentType());
             $attachment->setFilename($messageAttachment->getFilename());
 
             $message->addAttachment($attachment);

@@ -9,11 +9,6 @@ class Attachment
     private $filename;
 
     /**
-     * @var string
-     */
-    private $type;
-
-    /**
      * @return string
      */
     public function getFilename()
@@ -27,21 +22,5 @@ class Attachment
     public function setFilename($filename)
     {
         $this->filename = $filename;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
     }
 }

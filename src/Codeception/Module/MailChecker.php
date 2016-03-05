@@ -236,6 +236,27 @@ class MailChecker extends Module
     }
 
     /**
+     * Checks that last email has expected address in CC field
+     *
+     * @param $expected
+     */
+    public function seeCcInLastEmail($expected)
+    {
+        $this->seeCcInEmail($this->provider->lastMessage() , $expected);
+    }
+
+    /**
+     * Checks that last email to has expected address in CC field
+     *
+     * @param $address
+     * @param $expected
+     */
+    public function seeCcInLastEmailTo($address, $expected)
+    {
+        $this->seeCcInEmail($this->provider->lastMessageTo($address) , $expected);
+    }
+
+    /**
      * Look for a regex in the email source and return it's matches
      *
      * @param $regex
