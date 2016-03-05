@@ -16,6 +16,7 @@ It supports several mail providers:
 * [ZenMail](https://github.com/zendframework/zend-mail)
 * [LatherMail](https://github.com/reclosedev/lathermail)
 * [Mailtrap](https://mailtrap.io)
+* [MailHog](https://github.com/mailhog/MailHog)
 * [Imap Server](https://github.com/johnatannvmd/codeception-mailchecker-imap-provider)
 
 ## Installation
@@ -219,7 +220,7 @@ Example:
     $I->seeAttachmentsCountInLastEmail(1);
     ?>
 
-* Param $exected
+* Param $expected
 
 ### seeAttachmentsCountInLastEmailTo
 
@@ -230,6 +231,32 @@ Example:
 
     <?php
     $I->seeAttachmentsCountInLastEmailTo('admin@example.com', 1);
+    ?>
+
+* Param $address
+* Param $expected
+
+### seeCcInLastEmail
+
+Checks that the last email sent has expected address in CC field
+
+Example:
+
+    <?php
+    $I->seeCcInLastEmail('cc@example.com');
+    ?>
+
+* Param $expected
+
+### seeCcInLastEmailTo
+
+Checks that the last email sent to and address has expected address in
+CC field
+
+Example:
+
+    <?php
+    $I->seeCcInLastEmailTo('admin@example.com', 'cc@example.com');
     ?>
 
 * Param $address
