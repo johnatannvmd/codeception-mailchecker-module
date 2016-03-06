@@ -13,7 +13,7 @@
     "mailtrap"
   ],
   "license": "MIT",
-  "version": "1.2",
+  "version": "1.2.1",
   "authors": [
     {
       "name": "Evgeniy Tetenchuk",
@@ -24,8 +24,7 @@
     "php": ">=5.4",
     "ext-mailparse": "*",
     "ext-imap": "*",
-    "php-mime-mail-parser/php-mime-mail-parser": "~2.0",
-    "johnatannvmd/codeception-mailchecker-testkit": "dev-master"
+    "php-mime-mail-parser/php-mime-mail-parser": "~2.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "2.*",
@@ -33,7 +32,8 @@
     "swiftmailer/swiftmailer": "^5.0",
     "zendframework/zend-mail": "^2.6",
     "satooshi/php-coveralls": "~1.0",
-    "guzzlehttp/guzzle": "^6.1"
+    "guzzlehttp/guzzle": "^6.1",
+    "johnatannvmd/codeception-mailchecker-testkit": "dev-master"
   },
   "suggest": {
     "guzzlehttp/guzzle": "Allow you to use MailCatcher, MailDump, LatherMail, MailTrap providers",
