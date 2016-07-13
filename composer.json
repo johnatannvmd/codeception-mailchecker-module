@@ -45,7 +45,7 @@
     }
   },
   "scripts": {
-    "phpcs": "php vendor/bin/phpcs --severity=6 --standard=test/ruleset.xml src/"
+    "phpcs": "php vendor/bin/phpcs --severity=6 --standard=ruleset.xml src/"
   },
   "repositories": [
     {
