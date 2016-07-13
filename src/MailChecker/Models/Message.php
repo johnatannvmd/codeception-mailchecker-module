@@ -105,7 +105,7 @@ class Message
      */
     public function setFrom($from)
     {
-        $this->from = $from;
+        $this->from = $this->parseMailAddresses($from)[0];
     }
 
     /**
@@ -117,19 +117,11 @@ class Message
     }
 
     /**
-     * @param string[] $to
-     */
-    public function setTo(array $to)
-    {
-        $this->to = $to;
-    }
-
-    /**
      * @param string $to
      */
-    public function addTo($to)
+    public function setTo($to)
     {
-        $this->to[] = $to;
+        $this->to = $this->parseMailAddresses($to);
     }
 
     /**
@@ -139,13 +131,7 @@ class Message
      */
     public function containsTo($address)
     {
-        foreach ($this->to as $to) {
-            if ($to == $address) {
-                return true;
-            }
-        }
-
-        return false;
+        return in_array($address, $this->to, true);
     }
 
     /**
@@ -157,19 +143,16 @@ class Message
     }
 
     /**
-     * @param string[] $cc
-     */
-    public function setCc(array $cc)
-    {
-        $this->cc = $cc;
-    }
-
-    /**
      * @param string $cc
      */
-    public function addCc($cc)
+    public function setCc($cc)
     {
-        $this->cc[] = $cc;
+        $this->cc = $this->parseMailAddresses($cc);
+    }
+
+    public function containsCc($address)
+    {
+        return in_array($address, $this->cc, true);
     }
 
     /**
@@ -204,5 +187,24 @@ class Message
     public function addAttachment(Attachment $attachment)
     {
         $this->attachments[] = $attachment;
+    }
+
+    /**
+     * @param $email
+     * @return array|null
+     */
+    private function parseMailAddresses($email)
+    {
+        $fromParse = imap_rfc822_parse_adrlist($email, 'none.co');
+        if (!is_array($fromParse) || count($fromParse) < 1) {
+            return null;
+        }
+
+        $result = [];
+        foreach ($fromParse as $email) {
+            $result[] = $email->mailbox . '@' . $email->host;
+        }
+
+        return $result;
     }
 }

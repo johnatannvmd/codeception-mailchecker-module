@@ -18,29 +18,24 @@ trait RawMailProvider
         $parser = new MailParser();
         $parser->setText($rawMessage);
 
-        $headers = array_change_key_case($parser->getHeaders());
+        $headers = array_change_key_case($parser->getHeaders(), CASE_LOWER);
 
         $message = new Message();
-        $message->setDate(new \DateTime($headers['date']));
+        try {
+            $message->setDate(new \DateTime($headers['date']));
+        } catch(\Exception $e) {
+            // Can't recognize date time format
+            // TODO add config option for date time format parsing
+            $message->setDate(new \DateTime());
+        }
         $message->setSubject($headers['subject']);
         $message->setFrom($headers['from']);
-        if (is_array($headers['to'])) {
-            foreach ($headers['to'] as $to) {
-                $message->addTo($to);
-            }
-        } else {
-            $message->addTo($headers['to']);
+        $message->setTo($headers['to']);
+        if (isset($headers['cc'])) {
+            $message->setCc($headers['cc']);
         }
 
-        if (is_array($headers['cc'])) {
-            foreach ($headers['cc'] as $cc) {
-                $message->addCc($cc);
-            }
-        } else {
-            $message->addCc($headers['cc']);
-        }
-
-        foreach ($parser->parts as $part) {
+        foreach ($parser->getParts() as $part) {
             if (in_array($part['content-type'], ['text/plain', 'text/html'])) {
                 $body = new Body();
                 $body->setContentType($part['content-type']);

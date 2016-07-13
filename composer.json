@@ -24,8 +24,7 @@
     "php": ">=5.4",
     "ext-mailparse": "*",
     "ext-imap": "*",
-    "php-mime-mail-parser/php-mime-mail-parser": "~2.0",
-    "johnatannvmd/codeception-mailchecker-testkit": "dev-master"
+    "php-mime-mail-parser/php-mime-mail-parser": "~2.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "2.*",
@@ -37,8 +36,7 @@
   },
   "suggest": {
     "guzzlehttp/guzzle": "Allow you to use MailCatcher, MailDump, LatherMail, MailTrap providers",
-    "zendframework/zend-mail": "Allow you to use ZendMail provider",
-    "johnatannvmd/codeception-mailchecker-imap-provider": "Allow you to use ImapMail provider"
+    "zendframework/zend-mail": "Allow you to use ZendMail provider"
   },
   "autoload": {
     "psr-4": {

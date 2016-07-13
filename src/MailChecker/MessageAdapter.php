@@ -78,7 +78,11 @@ trait MessageAdapter
      */
     protected function dontSeeInEmailAttachment(Message $email, $unexpectedFilename)
     {
-        $this->assertNotContains($unexpectedFilename, $email->getAttachmentsFilesNames(), 'Email Does Not Contains Attachment');
+        $this->assertNotContains(
+            $unexpectedFilename,
+            $email->getAttachmentsFilesNames(),
+            'Email Does Not Contains Attachment'
+        );
     }
 
     /**
@@ -107,5 +111,16 @@ trait MessageAdapter
         $this->assertNotEmpty($matches, "No matches found for $regex");
 
         return $matches;
+    }
+
+    /**
+     * Look for expected address in CC field of the given email
+     *
+     * @param Message $email
+     * @param $expectedAddress
+     */
+    protected function seeCcInEmail(Message $email, $expectedAddress)
+    {
+        $this->assertContains($expectedAddress, $email->getCc(), 'Email Contains In CC');
     }
 }
