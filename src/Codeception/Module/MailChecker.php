@@ -236,6 +236,8 @@ class MailChecker extends Module
     }
 
     /**
+     * Look for the expected CC address in the last sent email.
+     *
      * @param $expectedAddress
      */
     public function seeCcInLastEmail($expectedAddress)
@@ -244,6 +246,8 @@ class MailChecker extends Module
     }
 
     /**
+     * Look for the expected CC address in the last sent email to a given address.
+     *
      * @param $address
      * @param $expectedAddress
      */

@@ -16,7 +16,7 @@ It supports several mail providers:
 * [ZenMail](https://github.com/zendframework/zend-mail)
 * [LatherMail](https://github.com/reclosedev/lathermail)
 * [Mailtrap](https://mailtrap.io)
-* [Imap Server](https://github.com/johnatannvmd/codeception-mailchecker-imap-provider)
+* [Imap Server] included
 
 ## Installation
 
@@ -234,6 +234,31 @@ Example:
 
 * Param $address
 * Param $expected
+
+### seeCcInLastEmail
+
+Look for the expected CC address in the last sent email.
+
+Example:
+
+    <?php
+    $I->seeCcInLastEmail('cc@example.com');
+    ?>
+
+* Param $expectedAddress
+
+### seeCcInLastEmailTo
+
+Look for the expected CC address in the last sent email to a given address.
+
+Example:
+
+    <?php
+    $I->seeCcInLastEmailTo('admin@example.com', 'cc@example.com');
+    ?>
+
+* Param $address
+* Param $expectedAddress
 
 ### grabMatchesFromLastEmail
 
