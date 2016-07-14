@@ -13,7 +13,7 @@ use MailChecker\Providers\BaseProviders\RawMailProvider;
  * MailTrap:
  *   options:
  *     url: 'https://mailtrap.io'
- *     port: '80'
+ *     port: '443'
  *     apiToken: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
  *     defaultInbox: 'Name of the Inbox'
  * ```
