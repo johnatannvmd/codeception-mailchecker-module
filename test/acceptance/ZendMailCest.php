@@ -1,7 +1,11 @@
 <?php
+
+/**
+ * Class ZendMailCest
+ */
 class ZendMailCest
 {
-    use \MailChecker\TestKit\BaseMailChecker {
+    use \Codeception\Module\BaseMailChecker {
         _before as _baseBefore;
     }
 

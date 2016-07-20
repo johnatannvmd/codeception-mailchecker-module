@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Class ImapMailCest
+ */
 class ImapMailCest
 {
-    use \MailChecker\TestKit\BaseMailChecker {
+    use \Codeception\Module\BaseMailChecker {
         _before as _baseBefore;
     }
 
@@ -13,37 +16,37 @@ class ImapMailCest
 
     protected function getFromAddress()
     {
-        return 'admin@127.0.0.1';
+        return 'admin@0.0.0.0';
     }
 
     protected function getToFirstAddress()
     {
-        return 'first@127.0.0.1';
+        return 'first@0.0.0.0';
     }
 
     protected function getToSecondAddress()
     {
-        return 'second@127.0.0.1';
+        return 'second@0.0.0.0';
     }
 
     protected function getToThirdAddress()
     {
-        return 'third@127.0.0.1';
+        return 'third@0.0.0.0';
     }
 
     protected function getCcFirstAddress()
     {
-        return 'cc-first@127.0.0.1';
+        return 'cc-first@0.0.0.0';
     }
 
     protected function getCcSecondAddress()
     {
-        return 'cc-second@127.0.0.1';
+        return 'cc-second@0.0.0.0';
     }
 
     protected function getCcThirdAddress()
     {
-        return 'cc-third@127.0.0.1';
+        return 'cc-third@0.0.0.0';
     }
 
     public function _before(\Codeception\Module\SmtpMailerHelper $mailer)

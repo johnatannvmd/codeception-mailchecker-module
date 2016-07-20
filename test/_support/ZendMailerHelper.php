@@ -58,6 +58,5 @@ class ZendMailerHelper extends BaseMailerHelper
         $this->transport->send($message);
 
         $this->debugSection('ZendMailer', $subject . ' ' . $from . ' -> ' . $to);
-        $this->debugSection('ZendMailer', $subject . ' ' . json_encode($cc, JSON_FORCE_OBJECT));
     }
 }

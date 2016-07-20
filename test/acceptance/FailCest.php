@@ -1,4 +1,8 @@
 <?php
+
+/**
+ * Class FailCest
+ */
 class FailCest
 {
     public function notExistsMailProvider(AcceptanceTester $I)

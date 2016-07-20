@@ -12,7 +12,7 @@ class LatherDumpCest
      */
     private $password = 'password';
 
-    use \MailChecker\TestKit\BaseMailChecker {
+    use \Codeception\Module\BaseMailChecker {
         _before as _baseBefore;
         sendEmails as _baseSendEmails;
     }

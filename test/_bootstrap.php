@@ -57,3 +57,19 @@ array_map(
         'extension' => 'eml'
     ]
 ];
+
+\Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['ImapMail'] = [
+    'options' => [
+        'host' => '0.0.0.0',
+        'port' => '3993', // 4110 for pop3
+        'service' => 'imap',
+        'credentials' => [
+            'first@0.0.0.0' => 'first@0.0.0.0',
+            'second@0.0.0.0' => 'second@0.0.0.0',
+            'third@0.0.0.0' => 'third@0.0.0.0',
+        ],
+        'flags' => 'ssl/novalidate-cert',
+    ],
+    'smtpHost' => '0.0.0.0',
+    'smtpPort' => '3465'
+];

@@ -1,6 +1,9 @@
 <?php
-namespace MailChecker\TestKit;
+namespace Codeception\Module;
 
+/**
+ * Class BaseMailChecker
+ */
 trait BaseMailChecker
 {
     /**

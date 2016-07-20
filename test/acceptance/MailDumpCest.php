@@ -1,7 +1,11 @@
 <?php
+
+/**
+ * Class MailDumpCest
+ */
 class MailDumpCest
 {
-    use \MailChecker\TestKit\BaseMailChecker {
+    use \Codeception\Module\BaseMailChecker {
         _before as _baseBefore;
     }
 
