@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class LatherDumpCest
+ * Class LatherMailCest
  *
  * @property \Codeception\Module\SmtpMailerHelper $mailer
  */
-class LatherDumpCest
+class LatherMailCest
 {
     /**
      * @var string One password to rule all inboxes
