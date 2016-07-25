@@ -19,7 +19,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   # Login to the private repo
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" https://johnatan.ru:5000
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" https://johnatan.ru:5000
   # Up all the services with ignore output
   - docker-compose up </dev/null &>/dev/null &
   - if [[ "$TRAVIS_PHP_VERSION" = "5.5" ]]; then pecl install mailparse-2.1.6 ; fi
