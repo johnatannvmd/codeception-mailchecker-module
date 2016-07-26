@@ -1,6 +1,8 @@
 <?php
 namespace MailChecker\Providers;
 
+use MailChecker\Exceptions\MailProviderException;
+use MailChecker\Exceptions\MessageNotFoundException;
 use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 use MailChecker\Providers\BaseProviders\RawMailProvider;
 
@@ -30,7 +32,11 @@ class LatherMail implements IProvider
      */
     public function clear()
     {
-        $this->transport->delete('/api/0/messages/');
+        try {
+            $this->transport->delete('/api/0/messages/');
+        } catch (\Exception $e) {
+            throw new MailProviderException($e->getMessage());
+        }
     }
 
     /**
@@ -38,12 +44,7 @@ class LatherMail implements IProvider
      */
     public function lastMessageTo($address)
     {
-        $messages = $this->getLastMessage(['recipients.address' => $address]);
-        if (is_null($messages)) {
-            return null;
-        }
-
-        return $messages;
+        return $this->getLastMessage(['recipients.address' => $address]);
     }
 
     /**
@@ -51,12 +52,7 @@ class LatherMail implements IProvider
      */
     public function lastMessage()
     {
-        $messages = $this->getLastMessage();
-        if (is_null($messages)) {
-            return null;
-        }
-
-        return $messages;
+        return $this->getLastMessage();
     }
 
     /**
@@ -72,7 +68,8 @@ class LatherMail implements IProvider
     /**
      * @param array $query
      *
-     * @return \MailChecker\Models\Message[]
+     * @return \MailChecker\Models\Message
+     * @throws \MailChecker\Exceptions\MessageNotFoundException
      */
     private function getLastMessage(array $query = [])
     {
@@ -84,10 +81,10 @@ class LatherMail implements IProvider
 
         $response = json_decode($this->transport->get('/api/0/messages/', $options)->getBody(), true);
 
-        if (isset($response['message_list'])) {
+        if (isset($response['message_list']) && !empty($response['message_list'])) {
             return $this->getMessage($response['message_list'][0]['message_raw']);
         }
 
-        return null;
+        throw new MessageNotFoundException();
     }
 }

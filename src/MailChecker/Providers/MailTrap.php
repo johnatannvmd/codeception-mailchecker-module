@@ -2,6 +2,7 @@
 namespace MailChecker\Providers;
 
 use MailChecker\Exceptions\MailProviderException;
+use MailChecker\Exceptions\MessageNotFoundException;
 use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 use MailChecker\Providers\BaseProviders\RawMailProvider;
 
@@ -48,7 +49,11 @@ class MailTrap implements IProvider
      */
     public function clear()
     {
-        $this->transport->patch('/api/v1/inboxes/' . $this->defaultInbox['id'] . '/clean');
+        try {
+            $this->transport->patch("/api/v1/inboxes/{$this->defaultInbox['id']}/clean");
+        } catch (\Exception $e) {
+            throw new MailProviderException($e->getMessage());
+        }
     }
 
     /**
@@ -59,7 +64,7 @@ class MailTrap implements IProvider
         $inboxInfo = json_decode($this->transport->get("/api/v1/inboxes/{$this->defaultInbox['id']}")->getBody(), true);
 
         if ($inboxInfo == false) {
-            throw new MailProviderException('Can not decode answer from MailTrap. ');
+            throw new MailProviderException('Can not decode answer from MailTrap');
         }
 
         return $inboxInfo['emails_count'];
@@ -70,12 +75,7 @@ class MailTrap implements IProvider
      */
     public function lastMessageTo($address)
     {
-        $messages = $this->getLastMessage(['search' => $address]);
-        if (is_null($messages)) {
-            return null;
-        }
-
-        return $messages;
+        return $this->getLastMessage(['search' => $address]);
     }
 
     /**
@@ -83,18 +83,14 @@ class MailTrap implements IProvider
      */
     public function lastMessage()
     {
-        $messages = $this->getLastMessage();
-        if (is_null($messages)) {
-            return null;
-        }
-
-        return $messages;
+        return $this->getLastMessage();
     }
 
     /**
      * @param null $search
      *
      * @return \MailChecker\Models\Message|null
+     * @throws \MailChecker\Exceptions\MessageNotFoundException
      */
     private function getLastMessage($search = null)
     {
@@ -113,7 +109,7 @@ class MailTrap implements IProvider
             return $this->getMessage($this->transport->get($response[0]['raw_path'])->getBody());
         }
 
-        return null;
+        throw new MessageNotFoundException();
     }
 
     /**
@@ -125,7 +121,7 @@ class MailTrap implements IProvider
     {
         $inboxes = json_decode($this->transport->get('/api/v1/inboxes')->getBody(), true);
         if ($inboxes === false) {
-            throw new MailProviderException('Can not decode answer from MailTrap. ');
+            throw new MailProviderException('Can not decode answer from MailTrap');
         }
 
         foreach ($inboxes as $inbox) {

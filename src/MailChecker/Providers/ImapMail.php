@@ -2,6 +2,7 @@
 namespace MailChecker\Providers;
 
 use MailChecker\Exceptions\MailProviderException;
+use MailChecker\Exceptions\MessageNotFoundException;
 use MailChecker\Models\Message;
 use MailChecker\Providers\BaseProviders\RawMailProvider;
 
@@ -65,7 +66,7 @@ class ImapMail implements IProvider
         }
 
         $this->mailbox = "{{$config['options']['host']}:{$config['options']['port']}" .
-            "{$this->service}{$flags}}INBOX{$folder}";
+            "{$this->service}{$flags}}{$folder}";
 
         $this->credentials = $config['options']['credentials'];
     }
@@ -76,13 +77,13 @@ class ImapMail implements IProvider
     public function clear()
     {
         foreach ($this->credentials as $email => $password) {
-            codecept_debug('Clear mail box: ' . $email);
-
             $this->clearMailBox($this->openMailbox($email));
         }
     }
 
     /**
+     * Count messages from all mailboxes
+     *
      * @inheritdoc
      */
     public function messagesCount()
@@ -108,7 +109,7 @@ class ImapMail implements IProvider
     {
         $messages = $this->messages($address);
         if (empty($messages)) {
-            return null;
+            throw new MessageNotFoundException();
         }
 
         return $messages[0];
@@ -121,24 +122,26 @@ class ImapMail implements IProvider
     {
         $messages = $this->messages();
         if (empty($messages)) {
-            return null;
+            throw new MessageNotFoundException();
         }
 
         return $messages[0];
     }
 
     /**
-     * @param string|null $from
+     * Collect messages from all mailboxes
+     *
+     * @param string|null $to
      *
      * @return \MailChecker\Models\Message[]
      * @throws \MailChecker\Exceptions\MailProviderException
      */
-    private function messages($from = null)
+    private function messages($to = null)
     {
         $messages = [];
 
         foreach ($this->credentials as $email => $password) {
-            if (!is_null($from) && $email != $from) {
+            if (!is_null($to) && $email != $to) {
                 continue;
             }
 
@@ -154,23 +157,17 @@ class ImapMail implements IProvider
 
     /**
      * @param $mailboxResource
-     *
      * @return array
      */
     private function parseMessages($mailboxResource)
     {
-        $messages = imap_sort($mailboxResource, SORTARRIVAL, 0, SE_UID, 'ALL');
-        if ($messages === false) {
-            return [];
-        }
-
         return array_map(function ($messageId) use ($mailboxResource) {
             return $this->getMessage(
                 imap_fetchheader($mailboxResource, $messageId, FT_UID) .
                 "\r\n\r\n" .
                 imap_body($mailboxResource, $messageId, FT_UID | FT_PEEK)
             );
-        }, $messages);
+        }, imap_sort($mailboxResource, SORTARRIVAL, 0, SE_UID, 'ALL')); // Always return array
     }
 
     /**
@@ -216,7 +213,8 @@ class ImapMail implements IProvider
             throw new MailProviderException("Email address: '{$email}' does not found in credentials config");
         }
 
-        imap_timeout(IMAP_OPENTIMEOUT, 30);
+        imap_timeout(IMAP_OPENTIMEOUT, 5);
+        codecept_debug('Open email box: ' . $this->mailbox);
         $mailboxResource = imap_open($this->mailbox, $email, $this->credentials[$email], OP_SILENT);
 
         if ($mailboxResource === false) {

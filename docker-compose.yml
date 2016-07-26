@@ -3,8 +3,8 @@ greenmail:
   image: johnatan.ru:5000/greenmail:latest
   ports:
     - 3465:3025 # SMTP without auth
-    - 3993:3993 # POP3s port
-    - 3995:3995 # IMAPs port
+    - 3993:3993 # IMAPs port
+    - 3995:3995 # POP3s port
 
 lathermail:
   restart: always

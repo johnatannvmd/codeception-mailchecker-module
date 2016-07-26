@@ -82,11 +82,6 @@ class Message
     /**
      * @param Body $body
      */
-    public function setBody(Body $body)
-    {
-        $this->body = [$body];
-    }
-
     public function addBody(Body $body)
     {
         $this->body[] = $body;
@@ -106,14 +101,6 @@ class Message
     public function setFrom($from)
     {
         $this->from = $this->parseMailAddresses($from)[0];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getTo()
-    {
-        return $this->to;
     }
 
     /**
@@ -150,11 +137,6 @@ class Message
         $this->cc = $this->parseMailAddresses($cc);
     }
 
-    public function containsCc($address)
-    {
-        return in_array($address, $this->cc, true);
-    }
-
     /**
      * @return \MailChecker\Models\Attachment[]
      */
@@ -171,14 +153,6 @@ class Message
         foreach ($this->getAttachments() as $attachment) {
             yield $attachment->getFilename();
         }
-    }
-
-    /**
-     * @param \MailChecker\Models\Attachment[] $attachments
-     */
-    public function setAttachments(array $attachments)
-    {
-        $this->attachments = $attachments;
     }
 
     /**

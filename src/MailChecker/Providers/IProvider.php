@@ -9,6 +9,7 @@ interface IProvider
      * Clears messages in provider
      *
      * @return void
+     * @throws \MailChecker\Exceptions\MailProviderException
      */
     public function clear();
 
@@ -24,14 +25,16 @@ interface IProvider
      *
      * @param $address
      *
-     * @return Message|null
+     * @return Message
+     * @throws \MailChecker\Exceptions\MessageNotFoundException
      */
     public function lastMessageTo($address);
 
     /**
      * Get last message from provider
      *
-     * @return Message|null
+     * @return Message
+     * @throws \MailChecker\Exceptions\MessageNotFoundException
      */
     public function lastMessage();
 }

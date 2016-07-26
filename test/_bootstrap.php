@@ -64,7 +64,7 @@ array_map(
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['ImapMail'] = [
     'options' => [
         'host' => '0.0.0.0',
-        'port' => '3993', // 4110 for pop3
+        'port' => '3993',
         'service' => 'imap',
         'credentials' => [
             'first@0.0.0.0' => 'first@0.0.0.0',

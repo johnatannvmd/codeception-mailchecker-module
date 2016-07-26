@@ -61,9 +61,9 @@ trait BaseMailChecker
     /**
      * @before clearMailbox
      *
-     * @param \AcceptanceTester $I
+     * @group smoke
      */
-    public function sendEmails(\AcceptanceTester $I)
+    public function sendEmails()
     {
         $this->mailer->sendEmail(
             $this->getFromAddress(),
@@ -106,6 +106,21 @@ trait BaseMailChecker
             'Body ' . sqs('last'),
             'file' . sqs('last') . '.ext'
         );
+    }
+
+    /**
+     * @depends sendEmails
+     *
+     * @param \AcceptanceTester $I
+     *
+     * @group smoke
+     */
+    public function failTest(\AcceptanceTester $I)
+    {
+        $I->wantTo('Fail some mail searches');
+        $I->expectException(\MailChecker\Exceptions\MessageNotFoundException::class, function () use ($I) {
+            $I->dontSeeInLastEmailTo('wrong@email.address', 'Wrong Message');
+        });
     }
 
     /**
@@ -358,6 +373,8 @@ trait BaseMailChecker
      * @depends sendEmails
      *
      * @param \AcceptanceTester $I
+     *
+     * @group smoke
      */
     public function clearMailbox(\AcceptanceTester $I)
     {

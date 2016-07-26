@@ -7,43 +7,21 @@ class FailCest
 {
     public function notExistsMailProvider(AcceptanceTester $I)
     {
-        $catch = false;
-
-        try {
+        $I->expectException(\MailChecker\Exceptions\MailProviderNotFoundException::class, function() use ($I) {
             $I->getMailProvider('FiledMailProvider');
-        } catch (\MailChecker\Exceptions\MailProviderNotFoundException $e) {
-            $I->assertContains('not found', $e->getMessage());
-            $catch = true;
-        }
-
-        $I->assertTrue($catch);
+        });
     }
 
     public function wrongMailProvider(AcceptanceTester $I)
     {
-        $catch = false;
-
-        try {
+        $I->expectException(\MailChecker\Exceptions\MailProviderHasBadInterfaceException::class, function() use ($I) {
             $I->getMailProvider('WrongProvider');
-        } catch (\MailChecker\Exceptions\MailProviderNotFoundException $e) {
-            $I->assertContains('instance', $e->getMessage());
-            $catch = true;
-        }
-
-        $I->assertTrue($catch);
+        });
     }
 
     public function rightMailProvider(AcceptanceTester $I)
     {
-        $catch = false;
-
-        try {
-            $I->getMailProvider('RightProvider');
-        } catch (\MailChecker\Exceptions\MailProviderNotFoundException $e) {
-            $catch = true;
-        }
-
-        $I->assertFalse($catch);
+        $I->getMailProvider('RightProvider');
     }
 }
 

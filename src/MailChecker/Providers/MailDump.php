@@ -1,7 +1,8 @@
 <?php
 namespace MailChecker\Providers;
 
-use MailChecker\Models\Message;
+use MailChecker\Exceptions\MailProviderException;
+use MailChecker\Exceptions\MessageNotFoundException;
 use MailChecker\Providers\BaseProviders\GuzzleBasedProvider;
 use MailChecker\Providers\BaseProviders\RawMailProvider;
 
@@ -28,7 +29,11 @@ class MailDump implements IProvider
      */
     public function clear()
     {
-        $this->transport->delete('/messages/');
+        try {
+            $this->transport->delete('/messages/');
+        } catch (\Exception $e) {
+            throw new MailProviderException($e->getMessage());
+        }
     }
 
     /**
@@ -48,14 +53,15 @@ class MailDump implements IProvider
     {
         $lastMessage = null;
         $messages = $this->getMessages();
-        if (is_null($messages)) {
-            return null;
-        }
 
         foreach ($messages as $message) {
             if ($message->containsTo($address)) {
                 $lastMessage = $message;
             }
+        }
+
+        if (is_null($lastMessage)) {
+            throw new MessageNotFoundException();
         }
 
         return $lastMessage;
@@ -68,15 +74,12 @@ class MailDump implements IProvider
     {
         $messages = $this->getMessages();
 
-        if (is_null($messages)) {
-            return null;
-        }
-
         return array_pop($messages);
     }
 
     /**
-     * @return Message[]|null
+     * @return \MailChecker\Models\Message[]
+     * @throws \MailChecker\Exceptions\MessageNotFoundException
      */
     private function getMessages()
     {
@@ -88,6 +91,6 @@ class MailDump implements IProvider
             }, $response['messages']);
         }
 
-        return null;
+        throw new MessageNotFoundException();
     }
 }

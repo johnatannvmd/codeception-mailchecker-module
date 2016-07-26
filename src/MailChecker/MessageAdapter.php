@@ -1,7 +1,6 @@
 <?php
 namespace MailChecker;
 
-use MailChecker\Models\Attachment;
 use MailChecker\Models\Message;
 
 /**
@@ -12,6 +11,7 @@ use MailChecker\Models\Message;
  * @method assertNotContains($expect, $actual, $message)
  * @method assertNotEmpty($actual, $message)
  * @method assertEquals($expected, $actual, $message = '')
+ * @method fail($message)
  */
 trait MessageAdapter
 {
@@ -42,6 +42,7 @@ trait MessageAdapter
      *
      * @param Message $email
      * @param $expected
+     * @throws \MailChecker\Exceptions\MessageNotFoundException
      */
     protected function seeInEmail(Message $email, $expected)
     {
@@ -108,7 +109,7 @@ trait MessageAdapter
         $matches = [];
 
         preg_match($regex, $email->getBody()[0]->getBody(), $matches);
-        $this->assertNotEmpty($matches, "No matches found for $regex");
+        $this->assertNotEmpty($matches, "No matches found for {$regex}");
 
         return $matches;
     }

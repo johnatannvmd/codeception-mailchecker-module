@@ -1,6 +1,8 @@
 <?php
 namespace MailChecker\Providers;
 
+use MailChecker\Exceptions\MailProviderException;
+use MailChecker\Exceptions\MessageNotFoundException;
 use MailChecker\Providers\BaseProviders\RawMailProvider;
 
 /**
@@ -35,15 +37,18 @@ class ZendMail implements IProvider
      *
      * @param $config
      *
-     * @throws \Exception
+     * @throws \MailChecker\Exceptions\MailProviderException
      */
     public function __construct($config)
     {
         if (!isset($config['options']['path'], $config['options']['extension'])) {
-            throw new \Exception('ZendMail provider can not find path or extension options in config.');
+            throw new MailProviderException('ZendMail provider can not find path or extension options in config');
         }
 
         $this->path = realpath($config['options']['path']);
+        if (!is_dir($this->path)) {
+            throw new MailProviderException('ZendMail path is not a directory or does not exists');
+        }
         $this->extension = $config['options']['extension'];
     }
 
@@ -55,7 +60,10 @@ class ZendMail implements IProvider
         $emails = glob($this->path . '/*.' . $this->extension);
         foreach ($emails as $email) {
             if (is_file($email)) {
-                unlink($email);
+                $result = unlink($email);
+                if ($result === false) {
+                    throw new MailProviderException('Could not clear ZendMail inbox directory');
+                }
             }
         }
     }
@@ -75,14 +83,15 @@ class ZendMail implements IProvider
     {
         $lastMessage = null;
         $messages = $this->getMessages();
-        if (is_null($messages)) {
-            return null;
-        }
 
         foreach ($messages as $message) {
             if ($message->containsTo($address)) {
                 $lastMessage = $message;
             }
+        }
+
+        if (is_null($lastMessage)) {
+            throw new MessageNotFoundException();
         }
 
         return $lastMessage;
@@ -95,21 +104,18 @@ class ZendMail implements IProvider
     {
         $messages = $this->getMessages();
 
-        if (is_null($messages)) {
-            return null;
-        }
-
         return array_pop($messages);
     }
 
     /**
-     * @return \MailChecker\Models\Message[]|null
+     * @return \MailChecker\Models\Message[]
+     * @throws \MailChecker\Exceptions\MessageNotFoundException
      */
     private function getMessages()
     {
         $messages = glob($this->path . '/*.' . $this->extension);
         if (empty($messages)) {
-            return null;
+            throw new MessageNotFoundException();
         }
 
         return array_map(
