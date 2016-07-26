@@ -64,7 +64,8 @@ class ImapMail implements IProvider
             $folder = '';
         }
 
-        $this->mailbox = "{{$config['options']['host']}:{$config['options']['port']}{$this->service}{$flags}}INBOX{$folder}";
+        $this->mailbox = "{{$config['options']['host']}:{$config['options']['port']}" .
+            "{$this->service}{$flags}}INBOX{$folder}";
 
         $this->credentials = $config['options']['credentials'];
     }

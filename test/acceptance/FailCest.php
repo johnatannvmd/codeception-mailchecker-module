@@ -11,7 +11,7 @@ class FailCest
 
         try {
             $I->getMailProvider('FiledMailProvider');
-        } catch(\MailChecker\Exceptions\MailProviderNotFoundException $e) {
+        } catch (\MailChecker\Exceptions\MailProviderNotFoundException $e) {
             $I->assertContains('not found', $e->getMessage());
             $catch = true;
         }
@@ -25,7 +25,7 @@ class FailCest
 
         try {
             $I->getMailProvider('WrongProvider');
-        } catch(\MailChecker\Exceptions\MailProviderNotFoundException $e) {
+        } catch (\MailChecker\Exceptions\MailProviderNotFoundException $e) {
             $I->assertContains('instance', $e->getMessage());
             $catch = true;
         }
@@ -39,7 +39,7 @@ class FailCest
 
         try {
             $I->getMailProvider('RightProvider');
-        } catch(\MailChecker\Exceptions\MailProviderNotFoundException $e) {
+        } catch (\MailChecker\Exceptions\MailProviderNotFoundException $e) {
             $catch = true;
         }
 

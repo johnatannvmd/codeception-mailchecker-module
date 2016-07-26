@@ -23,7 +23,7 @@ trait RawMailProvider
         $message = new Message();
         try {
             $message->setDate(new \DateTime($headers['date']));
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             // Can't recognize date time format
             // TODO add config option for date time format parsing
             $message->setDate(new \DateTime());

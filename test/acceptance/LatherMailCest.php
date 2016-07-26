@@ -40,7 +40,8 @@ class LatherMailCest
 
     public function _before(\Codeception\Module\SmtpMailerHelper $mailer)
     {
-        \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['LatherMail']['options']['guzzleOptions'] = [
+        \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['LatherMail']['options']
+        ['guzzleOptions'] = [
             'headers' => [
                 'X-Mail-Password' => $this->password
             ]

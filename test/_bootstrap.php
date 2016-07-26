@@ -1,12 +1,15 @@
 <?php
 array_map(
-    function($item) {
-        if(getenv($item) === false) {
+    function ($item) {
+        if (getenv($item) === false) {
             throw new Exception("Environment variable {$item} was not set.");
         }
     },
     [
-        'MAIL_SERVICE_HOST', 'MAIL_TRAP_USER', 'MAIL_TRAP_PASSWORD', 'MAIL_TRAP_APITOKEN'
+        'MAIL_SERVICE_HOST',
+        'MAIL_TRAP_USER',
+        'MAIL_TRAP_PASSWORD',
+        'MAIL_TRAP_APITOKEN'
     ]
 );
 

@@ -10,7 +10,7 @@ abstract class BaseMailerHelper extends Module
 
     abstract public function sendEmail($from, $to, $cc, $subject, $body, $attachmentFilename);
 
-    public final function haveMailProvider($provider)
+    final public function haveMailProvider($provider)
     {
         $providers = $this->getProviders();
         $this->assertTrue(isset($providers[$provider]), "Provider {$provider} not found in acceptance suite config");

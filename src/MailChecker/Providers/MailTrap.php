@@ -94,7 +94,7 @@ class MailTrap implements IProvider
     /**
      * @param null $search
      *
-     * @return \MailChecker\Models\Message[]|null
+     * @return \MailChecker\Models\Message|null
      */
     private function getLastMessage($search = null)
     {

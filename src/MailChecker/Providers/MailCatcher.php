@@ -83,7 +83,9 @@ class MailCatcher implements IProvider
 
         if (!empty($response)) {
             return array_map(function ($rawMessage) {
-                return $this->getMessage($this->transport->get("/messages/{$rawMessage['id']}.source")->getBody()->getContents());
+                return $this->getMessage(
+                    $this->transport->get("/messages/{$rawMessage['id']}.source")->getBody()->getContents()
+                );
             }, $response);
         }
 

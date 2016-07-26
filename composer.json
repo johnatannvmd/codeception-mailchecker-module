@@ -1,50 +1,50 @@
 {
-  "name": "johnatannvmd/codeception-mailchecker-module",
-  "description": "Test emails in your Codeception acceptance tests",
-  "type": "library",
-  "keywords": [
-    "codeception",
-    "mail",
-    "acceptance",
-    "test",
-    "mailcatcher",
-    "maildump",
-    "lathermail",
-    "mailtrap"
-  ],
-  "license": "MIT",
-  "version": "1.2",
-  "authors": [
-    {
-      "name": "Evgeniy Tetenchuk",
-      "email": "webmaster@johnatan.ru"
+    "name": "johnatannvmd/codeception-mailchecker-module",
+    "description": "Test emails in your Codeception acceptance tests",
+    "type": "library",
+    "keywords": [
+        "codeception",
+        "mail",
+        "acceptance",
+        "test",
+        "mailcatcher",
+        "maildump",
+        "lathermail",
+        "mailtrap"
+    ],
+    "license": "MIT",
+    "version": "1.2",
+    "authors": [
+        {
+            "name": "Evgeniy Tetenchuk",
+            "email": "webmaster@johnatan.ru"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "ext-mailparse": "*",
+        "ext-imap": "*",
+        "php-mime-mail-parser/php-mime-mail-parser": "~2.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "2.*",
+        "codeception/codeception": "^2.1",
+        "swiftmailer/swiftmailer": "^5.0",
+        "zendframework/zend-mail": "^2.6",
+        "satooshi/php-coveralls": "~1.0",
+        "guzzlehttp/guzzle": "^6.1"
+    },
+    "suggest": {
+        "guzzlehttp/guzzle": "Allow you to use MailCatcher, MailDump, LatherMail, MailTrap providers",
+        "zendframework/zend-mail": "Allow you to use ZendMail provider"
+    },
+    "autoload": {
+        "psr-4": {
+            "Codeception\\Module\\": "src/Codeception/Module",
+            "MailChecker\\": "src/MailChecker"
+        }
+    },
+    "scripts": {
+        "phpcs": "php vendor/bin/phpcs -s --standard=ruleset.xml src/ test/"
     }
-  ],
-  "require": {
-    "php": ">=5.4",
-    "ext-mailparse": "*",
-    "ext-imap": "*",
-    "php-mime-mail-parser/php-mime-mail-parser": "~2.0"
-  },
-  "require-dev": {
-    "squizlabs/php_codesniffer": "2.*",
-    "codeception/codeception": "^2.1",
-    "swiftmailer/swiftmailer": "^5.0",
-    "zendframework/zend-mail": "^2.6",
-    "satooshi/php-coveralls": "~1.0",
-    "guzzlehttp/guzzle": "^6.1"
-  },
-  "suggest": {
-    "guzzlehttp/guzzle": "Allow you to use MailCatcher, MailDump, LatherMail, MailTrap providers",
-    "zendframework/zend-mail": "Allow you to use ZendMail provider"
-  },
-  "autoload": {
-    "psr-4": {
-      "Codeception\\Module\\": "src/Codeception/Module",
-      "MailChecker\\": "src/MailChecker"
-    }
-  },
-  "scripts": {
-    "phpcs": "php vendor/bin/phpcs --severity=6 --standard=ruleset.xml src/"
-  }
 }

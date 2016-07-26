@@ -3,7 +3,12 @@
  <description>Code standard</description>
  <arg name="encoding" value="utf-8"/>
  <rule ref="PSR1"/>
- <rule ref="PSR2"/>
+ <rule ref="PSR2">
+  <exclude name="PSR1.Classes.ClassDeclaration.MultipleClasses"/>
+  <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+  <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+  <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
+ </rule>
  <rule ref="Generic.Files.LineEndings">
   <properties>
    <property name="eolChar" value="\n"/>
