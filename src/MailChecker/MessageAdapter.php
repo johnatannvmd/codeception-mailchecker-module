@@ -96,11 +96,6 @@ trait MessageAdapter
         return count($email->getAttachments());
     }
 
-    protected function seeCcInEmail(Message $message, $address)
-    {
-        $this->assertContains($address, $message->getCc(), 'Email\'s CC contains');
-    }
-
     /**
      * Return the matches of a regex against the raw email
      *

@@ -62,7 +62,11 @@ class LatherMail implements IProvider
     {
         $response = json_decode($this->transport->get('/api/0/messages/')->getBody(), true);
 
-        return $response['message_count'];
+        if ($response === false) {
+            throw new MailProviderException('Wrong answer from API');
+        }
+
+        return (int)$response['message_count'];
     }
 
     /**

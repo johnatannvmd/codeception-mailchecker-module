@@ -43,6 +43,10 @@ class MailDump implements IProvider
     {
         $messages = json_decode($this->transport->get('/messages/')->getBody(), true);
 
+        if ($messages === false) {
+            throw new MailProviderException('Wrong answer from API');
+        }
+
         return count($messages['messages']);
     }
 

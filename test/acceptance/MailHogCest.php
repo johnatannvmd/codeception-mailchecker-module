@@ -1,7 +1,7 @@
 <?php
 class MailHogCest
 {
-    use \MailChecker\TestKit\BaseMailChecker {
+    use \Codeception\Module\BaseMailChecker {
         _before as _baseBefore;
     }
 

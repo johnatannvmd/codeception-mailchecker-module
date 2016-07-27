@@ -74,6 +74,10 @@ class MailCatcher implements IProvider
     {
         $messages = json_decode($this->transport->get('/messages')->getBody()->getContents(), true);
 
+        if ($messages === false) {
+            throw new MailProviderException('Wrong answer from API');
+        }
+
         return count($messages);
     }
 

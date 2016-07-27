@@ -6,12 +6,12 @@ greenmail:
     - 3993:3993 # IMAPs port
     - 3995:3995 # POP3s port
 
-lathermail:
+maildump:
   restart: always
-  image: johnatan.ru:5000/lathermail:latest
+  image: johnatan.ru:5000/maildump:latest
   ports:
-    - 1082:5000 # API
-    - 1027:2525 # SMTP port
+    - 1080:1080 # API
+    - 1025:1025 # SMTP port
 
 mailcatcher:
   restart: always
@@ -20,9 +20,16 @@ mailcatcher:
     - 1081:1080 # API
     - 1026:1025 # SMTP port
 
-maildump:
+lathermail:
   restart: always
-  image: johnatan.ru:5000/maildump:latest
+  image: johnatan.ru:5000/lathermail:latest
   ports:
-    - 1080:1080 # API
-    - 1025:1025 # SMTP port
+    - 1082:5000 # API
+    - 1027:2525 # SMTP port
+
+mailhog:
+  restart: always
+  image: johnatan.ru:5000/mailhog:latest
+  ports:
+    - 1083:8025 # API
+    - 1028:1025 # SMTP port
