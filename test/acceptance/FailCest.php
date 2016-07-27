@@ -7,14 +7,14 @@ class FailCest
 {
     public function notExistsMailProvider(AcceptanceTester $I)
     {
-        $I->expectException(\MailChecker\Exceptions\MailProviderNotFoundException::class, function() use ($I) {
+        $I->expectException(\MailChecker\Exceptions\MailProviderNotFoundException::class, function () use ($I) {
             $I->getMailProvider('FiledMailProvider');
         });
     }
 
     public function wrongMailProvider(AcceptanceTester $I)
     {
-        $I->expectException(\MailChecker\Exceptions\MailProviderHasBadInterfaceException::class, function() use ($I) {
+        $I->expectException(\MailChecker\Exceptions\MailProviderHasBadInterfaceException::class, function () use ($I) {
             $I->getMailProvider('WrongProvider');
         });
     }
