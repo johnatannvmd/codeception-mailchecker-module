@@ -91,9 +91,9 @@ class Body
 
     private function decodeContentTransfer($input)
     {
-        if ($this->encoding == 'base64') {
+        if ($this->getEncoding() == 'base64') {
             return base64_decode($input);
-        } elseif ($this->encoding == 'quoted-printable') {
+        } elseif ($this->getEncoding() == 'quoted-printable') {
             return quoted_printable_decode($input);
         }
 
@@ -102,11 +102,11 @@ class Body
 
     private function decodeCharset($input)
     {
-        if ($this->charset == 'utf-8' || $this->charset == 'us-ascii') {
+        if (in_array($this->getCharset(), ['utf-8', 'us-ascii'])) {
             return $input;
         }
 
         $charset = new Charset();
-        return $charset->decodeCharset($input, $this->charset);
+        return $charset->decodeCharset($input, $this->getCharset());
     }
 }
