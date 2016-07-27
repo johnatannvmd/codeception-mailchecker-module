@@ -42,6 +42,15 @@ array_map(
     'smtpPort' => '1027'
 ];
 
+\Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['MailHog'] = [
+    'options' => [
+        'url' => getenv('MAIL_SERVICE_HOST'),
+        'port' => '1083'
+    ],
+    'smtpHost' => '127.0.0.1',
+    'smtpPort' => '1028'
+];
+
 \Codeception\Configuration::$defaultSuiteSettings['modules']['config']['providers']['MailTrap'] = [
     'options' => [
         'url' => 'https://mailtrap.io',
