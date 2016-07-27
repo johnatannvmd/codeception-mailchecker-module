@@ -9,12 +9,13 @@ acceptance tests.
 It was inspired by the https://github.com/captbaritone/codeception-mailcatcher-module and
 https://github.com/fetch/zend-mail-codeception-module/.
 
-It supports several mail providers:
+It supports several mail testing tools:
 
 * [MailCatcher](http://mailcatcher.me/)
 * [MailDump](https://github.com/ThiefMaster/maildump)
 * [ZendMail](https://github.com/zendframework/zend-mail)
 * [LatherMail](https://github.com/reclosedev/lathermail)
+* [MailHog](https://github.com/mailhog/MailHog)
 * [Mailtrap](https://mailtrap.io)
 * [Imap Server] included
 
