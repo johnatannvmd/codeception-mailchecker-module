@@ -9,3 +9,4 @@ vendor/
 # Output
 poste.out
 test.out
+/.DS_Store
