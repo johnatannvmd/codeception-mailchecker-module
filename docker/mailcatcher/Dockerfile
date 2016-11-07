@@ -6,14 +6,14 @@ ENV	TIMEZONE GMT
 RUN	apk update && \
 	apk upgrade && \
 	apk add tzdata && \
-	apk add ruby ruby-json ruby-dev ruby-rdoc ruby-irb sqlite-libs sqlite-dev build-base && \
+	apk add ruby ruby-json ruby-dev ruby-rdoc ruby-irb sqlite-libs sqlite-dev build-base ca-certificates && \
 	cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
 	echo "${TIMEZONE}" > /etc/timezone && \
 	mkdir /usr/local/mailcatcher && \
 	cd /usr/local/mailcatcher && \
 	gem install bigdecimal && \
 	gem install mailcatcher && \
-	apk del tzdata ruby-dev ruby-rdoc ruby-irb sqlite-dev && \
+	apk del tzdata ruby-dev ruby-rdoc ruby-irb sqlite-dev ca-certificates && \
 	rm -rf /var/cache/apk/*
 
 #		API  SMTP

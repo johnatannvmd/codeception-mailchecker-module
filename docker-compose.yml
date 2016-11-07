@@ -1,35 +1,53 @@
-greenmail:
-  restart: always
-  image: johnatan.ru:5000/greenmail:latest
-  ports:
-    - 3465:3025 # SMTP without auth
-    - 3993:3993 # IMAPs port
-    - 3995:3995 # POP3s port
+version: "2.0"
 
-maildump:
-  restart: always
-  image: johnatan.ru:5000/maildump:latest
-  ports:
-    - 1080:1080 # API
-    - 1025:1025 # SMTP port
+services:
+    greenmail:
+        build:
+            context: ./docker/greenmail
+            dockerfile: Dockerfile
+        restart: always
+        image: johnatan.ru:5000/greenmail:latest
+        ports:
+          - 3465:3025 # SMTP without auth
+          - 3993:3993 # IMAPs port
+          - 3995:3995 # POP3s port
 
-mailcatcher:
-  restart: always
-  image: johnatan.ru:5000/mailcatcher:latest
-  ports:
-    - 1081:1080 # API
-    - 1026:1025 # SMTP port
+    maildump:
+        build:
+            context: ./docker/maildump
+            dockerfile: Dockerfile
+        restart: always
+        image: johnatan.ru:5000/maildump:latest
+        ports:
+          - 1080:1080 # API
+          - 1025:1025 # SMTP port
 
-lathermail:
-  restart: always
-  image: johnatan.ru:5000/lathermail:latest
-  ports:
-    - 1082:5000 # API
-    - 1027:2525 # SMTP port
+    mailcatcher:
+        build:
+            context: ./docker/mailcatcher
+            dockerfile: Dockerfile
+        restart: always
+        image: johnatan.ru:5000/mailcatcher:latest
+        ports:
+          - 1081:1080 # API
+          - 1026:1025 # SMTP port
 
-mailhog:
-  restart: always
-  image: johnatan.ru:5000/mailhog:latest
-  ports:
-    - 1083:8025 # API
-    - 1028:1025 # SMTP port
+    lathermail:
+        build:
+            context: ./docker/lathermail
+            dockerfile: Dockerfile
+        restart: always
+        image: johnatan.ru:5000/lathermail:latest
+        ports:
+          - 1082:5000 # API
+          - 1027:2525 # SMTP port
+
+    mailhog:
+        build:
+            context: ./docker/mailhog
+            dockerfile: Dockerfile
+        restart: always
+        image: johnatan.ru:5000/mailhog:latest
+        ports:
+          - 1083:8025 # API
+          - 1028:1025 # SMTP port

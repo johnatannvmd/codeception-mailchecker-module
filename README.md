@@ -333,6 +333,13 @@ Example:
 
 * Param $count
 
+# Docker
+
+Now you can build all modules at once by:
+```
+docker-compose build
+```
+
 # License
 
 Released under the same licence as Codeception: MIT

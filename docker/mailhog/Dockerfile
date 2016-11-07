@@ -6,13 +6,13 @@ ENV GOPATH /usr/local/mailhog
 
 RUN	apk update && \
 	apk upgrade && \
-	apk add tzdata go git && \
+	apk add tzdata go git ca-certificates && \
 	cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
 	echo "${TIMEZONE}" > /etc/timezone && \
 	mkdir /usr/local/mailhog && \
 	cd /usr/local/mailhog && \
 	go get github.com/mailhog/MailHog && \
-	apk del tzdata git go && \
+	apk del tzdata git go ca-certificates && \
 	rm -rf /var/cache/apk/*
 
 #		API  SMTP

@@ -13,7 +13,7 @@ RUN	apk update && \
 	rm -rf /var/cache/apk/* && \
 	mkdir /usr/local/greenmail && \
 	cd /usr/local/greenmail && \
-	wget http://central.maven.org/maven2/com/icegreen/greenmail-standalone/1.5.1/greenmail-standalone-1.5.1.jar
+	wget http://central.maven.org/maven2/com/icegreen/greenmail-standalone/1.5.2/greenmail-standalone-1.5.2.jar
 
 #		SMTP POP3 IMAP SMTP IMAP POP3
 EXPOSE	3025 3110 3143 3465 3993 3995
@@ -24,4 +24,4 @@ ENTRYPOINT ["/usr/bin/java", \
     "-Dgreenmail.setup.test.all", \
     "-Dgreenmail.hostname=0.0.0.0", \
     "-Dgreenmail.auth.disabled", \
-    "-jar", "greenmail-standalone-1.5.1.jar"]
+    "-jar", "greenmail-standalone-1.5.2.jar"]
