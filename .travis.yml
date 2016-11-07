@@ -22,7 +22,7 @@ before_install:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" https://johnatan.ru:5000
   # Up all the services with ignore output
   - docker-compose up </dev/null &>/dev/null &
-  - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then pecl install mailparse-2.1.6 ; fi
+  - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then pecl install -f mailparse-2.1.6 ; fi
   - if [[ "$TRAVIS_PHP_VERSION" = "7.0" ]]; then pecl install mailparse ; fi
   - phpenv config-add travis-php-config.ini
   - composer self-update
