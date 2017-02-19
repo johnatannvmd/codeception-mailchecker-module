@@ -3,18 +3,18 @@ FROM	alpine:latest
 
 ENV	TIMEZONE GMT
 
-RUN	apk update && \
-	apk upgrade && \
-	apk add tzdata && \
-	apk add ruby ruby-json ruby-dev ruby-rdoc ruby-irb sqlite-libs sqlite-dev build-base ca-certificates && \
+RUN apk add --no-cache --virtual .build-dependencies tzdata ruby-dev ruby-rdoc ruby-irb sqlite-dev build-base ca-certificates && \
+	apk add ruby ruby-json sqlite-libs libstdc++ && \
 	cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
 	echo "${TIMEZONE}" > /etc/timezone && \
 	mkdir /usr/local/mailcatcher && \
 	cd /usr/local/mailcatcher && \
 	gem install bigdecimal && \
 	gem install mailcatcher && \
-	apk del tzdata ruby-dev ruby-rdoc ruby-irb sqlite-dev ca-certificates && \
-	rm -rf /var/cache/apk/*
+	apk del .build-dependencies && \
+	rm -rf /var/cache/apk && \
+	rm -rf /var/lib/apk && \
+	rm -rf /etc/apk/cache
 
 #		API  SMTP
 EXPOSE	1080 1025

@@ -25,12 +25,10 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  # Login to the private repo
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" https://johnatan.ru:5000
   # Pull all the images from repo
   - docker-compose pull
-  # Up all the services with ignore output
-  - docker-compose up --no-build </dev/null &>/dev/null &
+  # Up all the services
+  - docker-compose up -d --no-build
   - pecl channel-update pecl.php.net
   - pecl install $EXT_MAILPARSE_VER
   - phpenv config-add travis-php-config.ini

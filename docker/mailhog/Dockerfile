@@ -4,16 +4,16 @@ FROM	alpine:latest
 ENV	TIMEZONE GMT
 ENV GOPATH /usr/local/mailhog
 
-RUN	apk update && \
-	apk upgrade && \
-	apk add tzdata go git ca-certificates && \
+RUN	apk add --no-cache --virtual .build-dependencies tzdata go git ca-certificates build-base && \
 	cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
 	echo "${TIMEZONE}" > /etc/timezone && \
 	mkdir /usr/local/mailhog && \
 	cd /usr/local/mailhog && \
 	go get github.com/mailhog/MailHog && \
-	apk del tzdata git go ca-certificates && \
-	rm -rf /var/cache/apk/*
+	apk del .build-dependencies && \
+	rm -rf /var/cache/apk && \
+	rm -rf /var/lib/apk && \
+	rm -rf /etc/apk/cache
 
 #		API  SMTP
 EXPOSE	8025 1025

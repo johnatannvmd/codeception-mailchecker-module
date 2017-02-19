@@ -1,20 +1,17 @@
 # Use Alpine Linux
-FROM	alpine:latest
+FROM	python:2.7-alpine
 
 ENV	TIMEZONE GMT
 
-RUN	apk update && \
-	apk upgrade && \
-	apk add tzdata && \
-	apk add python python-dev openssl ca-certificates build-base && \
-	apk add py-pip && \
-	cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
-	echo "${TIMEZONE}" > /etc/timezone && \
+RUN	apk --no-cache add --virtual .build-dependencies build-base python-dev openssl ca-certificates && \
+	python -m ensurepip && \
 	mkdir /usr/local/maildump && \
 	cd /usr/local/maildump && \
 	pip install maildump && \
-	apk del tzdata python-dev build-base openssl ca-certificates && \
-	rm -rf /var/cache/apk/*
+	apk del .build-dependencies && \
+	rm -rf /var/cache/apk && \
+	rm -rf /var/lib/apk && \
+	rm -rf /etc/apk/cache
 
 #		API  SMTP
 EXPOSE	1080 1025
