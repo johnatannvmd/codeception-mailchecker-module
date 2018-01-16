@@ -1,5 +1,7 @@
 # Codeception MailChecker Module
 
+This repo is abandoned. Please use https://github.com/captbaritone/codeception-mailcatcher-module instead or any other similar project.
+
 [![Build Status](https://travis-ci.org/johnatannvmd/codeception-mailchecker-module.svg?branch=master)](https://travis-ci.org/johnatannvmd/codeception-mailchecker-module)
 [![Coverage Status](https://coveralls.io/repos/johnatannvmd/codeception-mailchecker-module/badge.svg?branch=master&service=github)](https://coveralls.io/github/johnatannvmd/codeception-mailchecker-module?branch=master)
 
